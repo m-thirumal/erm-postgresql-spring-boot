@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active: DEV
+
+name: erm-postgresql-sping-boot
+server:
+  port: 1991
+  # ssl:
+   # key-store: classpath:demo_indsolv.keystore
+   # key-store-password: thirumal
+  compression:
+    enabled: true
+ 
+---
+
+logging: 
+ level: 
+  in.thirumal: debug
+  org.springframework:
+     jdbc.datasource.DataSourceTransactionManager: debug
+     cloud.task: DEBUG
+
+---
+spring:
+  datasource:
+    jdbc-url: jdbc:postgresql://localhost:5432/icms
+    url: ${spring.datasource.jdbc-url}
+    username: thirumal
+    password: thirumal
