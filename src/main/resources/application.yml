@@ -1,13 +1,18 @@
 spring:
   profiles:
     active: DEV
+    include: erm-target
+  main: 
+    allow-bean-definition-overriding: true
+  datasource:
+    jdbc-url: jdbc:postgresql://localhost:5432/icms
+    url: ${spring.datasource.jdbc-url}
+    username: thirumal
+    password: thirumal
 
 name: erm-postgresql-sping-boot
 server:
-  port: 1991
-  # ssl:
-   # key-store: classpath:demo_indsolv.keystore
-   # key-store-password: thirumal
+  port: 21991
   compression:
     enabled: true
  
@@ -20,10 +25,12 @@ logging:
      jdbc.datasource.DataSourceTransactionManager: debug
      cloud.task: DEBUG
 
----
-spring:
-  datasource:
-    jdbc-url: jdbc:postgresql://localhost:5432/icms
-    url: ${spring.datasource.jdbc-url}
-    username: thirumal
-    password: thirumal
+--- 
+    
+springdoc:
+  version: '@springdoc.version@'
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

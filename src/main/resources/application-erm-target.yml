@@ -1,0 +1,5 @@
+in: 
+  thirumal:
+    packageDao: com.enkindle.persistence.dao
+    packageModel: com.enkindle.persistence.model
+    rootFolder: erm2springbeans
