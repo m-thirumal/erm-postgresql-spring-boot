@@ -5,10 +5,11 @@ package in.thirumal.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import in.thirumal.rest.service.GeneratorService;
+import in.thirumal.rest.GenericService;
 
 /**
  * @author Thirumal
@@ -19,9 +20,10 @@ import in.thirumal.rest.service.GeneratorService;
 public class GeneratorController {
 
 	@Autowired
-	GeneratorService generatorService;
-	@GetMapping("")
-	public boolean generatedao() {
-		return generatorService.list();
+	GenericService genericService;
+	@GetMapping("/{schemaName}")
+	public boolean generatedao(@PathVariable("schemaName") String schemaName) {
+		return genericService.generate(schemaName);
 	}
+	
 }

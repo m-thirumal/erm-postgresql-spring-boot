@@ -9,13 +9,14 @@ import org.springframework.stereotype.Service;
 import in.thirumal.config.TargetConfig;
 import in.thirumal.model.Entity;
 import in.thirumal.persistence.GenericDao;
+import in.thirumal.rest.GenericService;
 
 /**
  * @author Thirumal
  *
  */
 @Service
-public class GeneratorService {
+public class GeneratorService implements GenericService {
 
 	@Autowired
 	TargetConfig targetConfig;
@@ -23,7 +24,8 @@ public class GeneratorService {
 	@Autowired
 	private GenericDao<Entity> genericDao;
 	
-	public boolean list() {
+	@Override
+	public boolean generate(String schemaName) {
 		System.out.println(targetConfig.toString());
 		genericDao.list("j");
 		return true;
