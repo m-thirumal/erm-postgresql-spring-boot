@@ -3,6 +3,8 @@
  */
 package in.thirumal.persistence.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import in.thirumal.model.Entity;
@@ -13,7 +15,15 @@ import in.thirumal.persistence.GenericDao;
  *
  */
 @Repository
-public class dao implements GenericDao<Entity> {
+public class SchemaDao implements GenericDao<Entity> {
+
+	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	public SchemaDao(JdbcTemplate jdbcTemplate) {
+		super();
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
 	@Override
 	public Entity list(String schema) {
