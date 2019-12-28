@@ -4,10 +4,12 @@ import java.util.logging.Logger;
 
 import in.thirumal.utility.DbHelper;
 import in.thirumal.utility.ERM2BeansHelper;
+import lombok.ToString;
 /**
  * @author thirumal
  *
  */
+@ToString
 public class Attribute {
 	
 	private	static	final	Logger	LOGGER		=	Logger.getLogger(Attribute.class.getName());
@@ -25,7 +27,6 @@ public class Attribute {
 	private String rawName;
 	
 	public Attribute(String name, String type, Integer size) {
-		
 		rawName		=	name;
 		this.name 	= 	ERM2BeansHelper.StringHelper.sanitizeForAttributName(name.toLowerCase());
 		this.type 	= 	type;
@@ -33,19 +34,16 @@ public class Attribute {
 		isIncluded 	= 	true;
 		primaryKey	= 	false;
 		foreignKey  =   false; 
-		setSqlType(type);
-		
+		setSqlType(type);		
 		doJavaMapping();
-
 	}
 	
-	private void doJavaMapping(){
+	private void doJavaMapping() {
 		try {
 			javaType	=	DbHelper.sqlTypeToJavaType(type);
 		} catch (Exception e) {
 			LOGGER.severe(e.getMessage());
-		}
-		
+		}		
 		try {
 			javaPackagePath	=	DbHelper.simpleNameToCanonicalName(javaType);
 		} catch (Exception e) {
@@ -107,19 +105,15 @@ public class Attribute {
 		this.autoincrement = autoincrement;
 	}
 
-	public boolean isDate(){
-		
-		boolean result = false;
-		
+	public boolean isDate() {		
+		boolean result = false;		
 		if(javaType.equals("Date") ||
 		   javaType.equals("Time") ||
 		   javaType.equals("Timestamp") ||
 		   javaType.equals("DateTimeOffset")){
 			result = true;
-		}
-		
-		return result;
-		
+		}		
+		return result;		
 	}
 
 	public boolean isPrimaryKey() {

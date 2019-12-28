@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import in.thirumal.utility.ERM2BeansHelper;
+import lombok.ToString;
 
+@ToString
 public class Entity {
 
 	private	String 				nom;
