@@ -29,7 +29,7 @@ public class Entity {
 	}
 
 	//Getter / Setter
-	public String getRawName(){
+	public String getRawName() {
 		return rawName;
 	}
 
