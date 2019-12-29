@@ -4,11 +4,15 @@
 package in.thirumal.persistence.dao;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,6 +30,7 @@ import in.thirumal.persistence.GenericDao;
 public class SchemaDao implements GenericDao<Entity> {
 
 	private JdbcTemplate jdbcTemplate;
+	DatabaseMetaData metadata;
 	
 	@Autowired
 	public SchemaDao(JdbcTemplate jdbcTemplate) {
@@ -38,14 +43,15 @@ public class SchemaDao implements GenericDao<Entity> {
 		ResultSet resultSet = this.jdbcTemplate.execute(new ConnectionCallback<ResultSet>() {
 	        @Override
 	        public ResultSet doInConnection(Connection connection) throws SQLException {
+	        	metadata = connection.getMetaData();
 	            return connection.getMetaData().getColumns(databaseName, schemaName, null, null);
 	        }
 	    });
-		return getEntities(resultSet);
+		return getEntities(resultSet, databaseName);
 	}
 	
-	public List<Entity> getEntities(ResultSet resultSet) {
-		List<Entity> alTables = new ArrayList<Entity>();
+	public List<Entity> getEntities(ResultSet resultSet, String dbName) {
+		List<Entity> alTables = new ArrayList<>();
 		Entity currentEntite = null;
 		ArrayList<Attribute> alAttributs = null;
 		String checkdenom = "";
@@ -55,37 +61,30 @@ public class SchemaDao implements GenericDao<Entity> {
 		Integer size = null;
 		String tableSchem = null;
 		String tablePrefix = null;
-		String pkColumnName = null;
-		String fkColumnName = null;
-		//int i = 0;
-		ArrayList<String> pkColumnNames = new ArrayList<String>();
-		ArrayList<String> fkColumnNames = new ArrayList<String>();
+		ArrayList<String> pkColumnNames = new ArrayList<>();
+		ArrayList<String> fkColumnNames = new ArrayList<>();
 		try {
 			while (resultSet.next()) {
-				System.out.println(resultSet.toString());
-				/*tableSchem = resultSet.getString("TABLE_SCHEM");
-				if (!"sys".equalsIgnoreCase(tableSchem) && !"information_schema".equalsIgnoreCase(tableSchem)
+				tableSchem = resultSet.getString("TABLE_SCHEM");
+					if (!"sys".equalsIgnoreCase(tableSchem) && !"information_schema".equalsIgnoreCase(tableSchem)
 						&& !"dbo".equalsIgnoreCase(tableSchem)) {
 					tablename = resultSet.getString("TABLE_NAME");
 					tablePrefix = resultSet.getString("TABLE_SCHEM");
-					//System.out.println("TableName  : " + tablename + "\nTablePrefix: "+ tablePrefix);
 					name = resultSet.getString("COLUMN_NAME");
 					type = resultSet.getString("TYPE_NAME");
 					size = resultSet.getInt("COLUMN_SIZE");
 					if (!checkdenom.equals(tablename)) { // runs total number of table times
 						// retrieve PKs
-						pkColumnNames = new ArrayList<String>();
+						pkColumnNames = new ArrayList<>();
 						ResultSet rs = metadata.getPrimaryKeys(dbName, tablePrefix, tablename);
 						while (rs.next()) {
-							pkColumnName = rs.getString("COLUMN_NAME");
-							pkColumnNames.add(pkColumnName);
+							pkColumnNames.add(rs.getString("COLUMN_NAME"));
 						}
 						// Retrive FK
-						fkColumnNames = new ArrayList<String>();
+						fkColumnNames = new ArrayList<>();
 						ResultSet rsFk = metadata.getImportedKeys(dbName, tablePrefix, tablename);
 						while (rsFk.next()) {
-							fkColumnName = rsFk.getString("FKCOLUMN_NAME");
-							fkColumnNames.add(fkColumnName);
+							fkColumnNames.add(rsFk.getString("FKCOLUMN_NAME"));
 						}
 						currentEntite = new Entity(dbName, tablePrefix, tablename);
 						if (tablePrefix.equalsIgnoreCase("Codes")) {
@@ -93,25 +92,20 @@ public class SchemaDao implements GenericDao<Entity> {
 							// Table Locale_Cd does not refer to
 							// Codes.Locale_Locales
 							if (!"Locale_Cd".equalsIgnoreCase(tablename)) {
-								currentEntite.setConstantes(
-										DbHelper.retrieveCdForConstantes(connection, dbName, tablePrefix, tablename));
+								currentEntite.setConstantes(retrieveCdForConstantes(dbName, tablePrefix, tablename));
 							}
 						}
-						alAttributs = new ArrayList<Attribute>();
+						alAttributs = new ArrayList<>();
 						Attribute currentAttribut = new Attribute(name, type, size);
 						for (String pkCol : pkColumnNames) {
-						//	System.out.println("pkCol " + pkCol);
-						//	System.out.println(currentAttribut.getName());
 							if (pkCol.equalsIgnoreCase(currentAttribut.getRawName())) {
 								currentAttribut.setPrimaryKey(true);
-								if (DbHelper.columnIsAutoincrement(connection, dbName, tablePrefix, tablename, pkCol)) {
+								if (columnIsAutoincrement(dbName, tablePrefix, tablename, pkCol)) {
 									currentAttribut.setAutoincrement(true);
 								}
 							}
 						}
 						for (String fkCol : fkColumnNames) {
-							//	System.out.println("pkCol " + pkCol);
-							//	System.out.println(currentAttribut.getName());
 							if (fkCol.equalsIgnoreCase(currentAttribut.getRawName())) {
 								currentAttribut.setForeignKey(true);
 							}
@@ -126,28 +120,22 @@ public class SchemaDao implements GenericDao<Entity> {
 						// Creation du nouvel attribut
 						Attribute currentAttribut = new Attribute(name, type, size);
 						for (String pkCol : pkColumnNames) {
-							/*
-							 * System.out.println("pkCol "+pkCol);
-							 * System.out.println(currentAttribut.getName());
-							 */
-						/*	if (pkCol.equalsIgnoreCase(currentAttribut.getRawName())) {
+								if (pkCol.equalsIgnoreCase(currentAttribut.getRawName())) {
 								currentAttribut.setPrimaryKey(true);
-								if (DbHelper.columnIsAutoincrement(connection, dbName, tablePrefix, tablename, pkCol)) {
+								if (columnIsAutoincrement(dbName, tablePrefix, tablename, pkCol)) {
 									currentAttribut.setAutoincrement(true);
 								}
 							}
 						}
 						for (String fkCol : fkColumnNames) {
 							if (fkCol.equalsIgnoreCase(currentAttribut.getRawName())) {
-								//System.out.println("fkCol "+fkCol);
-								//System.out.println(currentAttribut.getName());
 								currentAttribut.setForeignKey(true);
 							}
 						}
 						alAttributs.add(currentAttribut);
 						currentEntite.setAlAttr(alAttributs);
 					}
-				}*/
+				} 
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -155,6 +143,57 @@ public class SchemaDao implements GenericDao<Entity> {
 		}
 		return alTables;
 	}
-
+	
+	public boolean columnIsAutoincrement(String db, String tablePrefix, String tableName, String columnName) {
+		boolean result = false;
+		ResultSetMetaData rsMetadata = null;
+		try (ResultSet rs = this.jdbcTemplate.getDataSource().getConnection().createStatement()
+				.executeQuery("SELECT "+columnName+" FROM "+tablePrefix+"."+tableName)) {
+			rs.next();
+			rsMetadata = rs.getMetaData();
+			result = rsMetadata.isAutoIncrement(1);
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		return result;
+	}
+	
+	public HashMap<String, Integer> retrieveCdForConstantes(String db, String tablePrefix, String tableName) {
+		HashMap<String, Integer> result = new HashMap<>();	
+		if(tableName.contains("_Cd")){
+			String tableNameToLookup = tableName.replace("_Cd", "_Locales");
+			//Cd description in english fetch only
+			String query = "SELECT ["+tableName+"], [Description] FROM ["+db+"].[Codes].["+tableNameToLookup+"] WHERE [Locale_Cd] = 1";
+			String key = null;
+			Integer value = null;
+			try (ResultSet rs = this.jdbcTemplate.getDataSource().getConnection().createStatement()
+					.executeQuery(query)) {
+				while(rs.next()){
+					key = rs.getString("Description");
+					//formatting
+					key = key.toUpperCase();
+					key = key.replaceAll(" ", "_");
+					key = key.replaceAll("\\(", "");
+					key = key.replaceAll("\\)", "");
+					key = key.replaceAll(",", "");
+					key = key.replaceAll("-", "_");
+					key = key.replaceAll("&", "");
+					key = key.replaceAll("/", "");
+					key = key.replaceAll("\\.", "_");
+					key = StringUtils.stripAccents(key);
+					key = key.replaceAll("[^a-zA-Z0-9_]", "_");
+					//check if startsWithNumber
+					//add underscore to conform to the Java namming allowed
+					if(Character.isDigit(key.charAt(0))){
+						key = "_"+key;
+					}
+					value = rs.getInt(tableName);
+					result.put(key, value);
+				}				
+			} catch (SQLException ex) {
+			}			
+		}		
+		return result;
+	}	
 	
 }

@@ -279,7 +279,7 @@ public final class DbHelper {
 				return "Date";
 			}			
 		}		
-		throw new Exception("Impossible to map the SQL type "+sqlType+" with a Java Type.");		
+		throw new Exception("Impossible to map the SQL type "+ sqlType +" with a Java Type.");		
 	}
 	
 	public static String simpleNameToCanonicalName(String simpleName) throws Exception {
@@ -294,70 +294,8 @@ public final class DbHelper {
 		}
 		throw new Exception("Impossible to find the canonical name from the simpleName: "+simpleName);
 	}
-
-	public static boolean columnIsAutoincrement(Connection connection, String db, String tablePrefix, String tableName, String columnName) {
-		boolean result = false;
-		Statement stmt = null;
-		ResultSet rs = null;
-		ResultSetMetaData rsMetadata = null;
-		try {
-			stmt = connection.createStatement();
-			/*System.out.println("re: " + columnName);
-			System.out.println("re: " + tablePrefix);
-			System.out.println("re: " + tableName);*/
-			// rs = stmt.executeQuery("SELECT "+columnName+" FROM ["+tablePrefix+"].["+tableName+"]");
-			rs = stmt.executeQuery("SELECT "+columnName+" FROM "+tablePrefix+"."+tableName);
-			rs.next();
-			rsMetadata = rs.getMetaData();
-			result = rsMetadata.isAutoIncrement(1);
-			//System.out.println("result: " + result);
-		} catch (SQLException ex) {
-			LOGGER.severe(ex.getMessage());
-		}
-		return result;
-	}
 	
-	public static HashMap<String, Integer> retrieveCdForConstantes(Connection connection, String db, String tablePrefix, String tableName) {
-		HashMap<String, Integer> result = new HashMap<>();	
-		if(tableName.contains("_Cd")){
-			String tableNameToLookup = tableName.replace("_Cd", "_Locales");
-			//Cd description in english fetch only
-			String query = "SELECT ["+tableName+"], [Description] FROM ["+db+"].[Codes].["+tableNameToLookup+"] WHERE [Locale_Cd] = 1";
-			Statement stmt = null;
-			ResultSet rs = null;
-			String key = null;
-			Integer value = null;
-			try {
-				stmt = connection.createStatement();
-				rs = stmt.executeQuery(query);
-				while(rs.next()){
-					key = rs.getString("Description");
-					//formatting
-					key = key.toUpperCase();
-					key = key.replaceAll(" ", "_");
-					key = key.replaceAll("\\(", "");
-					key = key.replaceAll("\\)", "");
-					key = key.replaceAll(",", "");
-					key = key.replaceAll("-", "_");
-					key = key.replaceAll("&", "");
-					key = key.replaceAll("/", "");
-					key = key.replaceAll("\\.", "_");
-					key = StringUtils.stripAccents(key);
-					key = key.replaceAll("[^a-zA-Z0-9_]", "_");
-					//check if startsWithNumber
-					//add underscore to conform to the Java namming allowed
-					if(Character.isDigit(key.charAt(0))){
-						key = "_"+key;
-					}
-					value = rs.getInt(tableName);
-					result.put(key, value);
-				}				
-			} catch (SQLException ex) {
-				LOGGER.severe("Impossible to retrieve the Code table for the table name "+tableName+" impossible to reach table "+tableNameToLookup+". Exception message "+ex.getMessage());
-			}			
-		}		
-		return result;
-	}	
+	
 	
 	public static final String createPreparementSet(String ps, int index, String javaType, String sqlType,
 			String objectSourceAsName, boolean canBeNull) {
