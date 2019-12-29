@@ -46,7 +46,7 @@ public class GeneratorService implements GenericService {
 		} catch (Exception e) {
 			LOGGER.info("Impossible to create the root folder: "+targetConfig.getRootFolder());
 		}	
-		//writeModel(entities);
+		writeModel(entities);
 		LOGGER.info("Model generated successfully");
 		writeDao(entities);
 		LOGGER.info("DAO generated successfully");

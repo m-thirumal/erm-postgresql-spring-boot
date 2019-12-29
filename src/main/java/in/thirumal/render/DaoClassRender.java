@@ -1,5 +1,6 @@
 package in.thirumal.render;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,7 +101,13 @@ public class DaoClassRender extends BaseClassRender {
 			}
 		}
 
-		output.append("/**" + lineSeparator  + " *" + lineSeparator + " * @author திருமால்" + lineSeparator + " *" + lineSeparator + " */" + lineSeparator);
+		output.append("/**\r\n" + 
+     			" * Generated using erm-postgresql-spring-boot project\r\n"+
+     			" * @see <a href=\"https://github.com/M-Thirumal/erm-postgresql-spring-boot\">erm-postgresql-spring-boot</a>\r\n" +
+     			" * @author திருமால்\r\n" + 
+     			" * @since "+ LocalDate.now() +"\r\n" + 
+     			" * @version 1.0\r\n" + 
+     			" */" + lineSeparator);
 		output.append("@Repository" + lineSeparator);
 		output.append("public class " + className
 				+ (getEntity().hasParent() ? " extends " + getEntity().getParentClass() : "")
@@ -278,7 +285,7 @@ public class DaoClassRender extends BaseClassRender {
 		output.append(tabulation + tabulation + "@Override" + lineSeparator);
 		output.append(tabulation + tabulation + "public " + modelFileName + " mapRow(ResultSet rs, int rowNum) throws SQLException {" + lineSeparator);
 		output.append(tabulation + tabulation +tabulation + modelFileName + " " + classNameLowerCase + " = new " + modelFileName + "();" + lineSeparator);
-
+/*
 		for (int i = 0, attributesLenght = attributes.size(); i < attributesLenght; i++) {
 			attribut = attributes.get(i);
 			String canonicalName;
@@ -292,15 +299,12 @@ public class DaoClassRender extends BaseClassRender {
 				output.append(tabulation + tabulation + tabulation +  "java.lang.String " + attribut.getName().substring(0, attribut.getName().length() - 2) 
 						+ "Locale" + " = null;" + lineSeparator);
 			}
-		}
-
-
+		}*/
 		for (int i = 0, attributesLenght = attributes.size(); i < attributesLenght; i++) {
 			attribut = attributes.get(i);
 			output.append(StringHelper.lineSeparator);
 			String rsCreated = DbHelper.createResulSet("rs", attribut.getJavaType(), attribut.getSqlType(),
 					attribut.getRawName());
-			output.append( tabulation + tabulation + tabulation + attribut.getName() + " = " + rsCreated + ";"+ lineSeparator);
 			if (!attribut.getJavaType().equalsIgnoreCase("Boolean")) {
 				methodName = StringHelper.saniziteForClassName(attribut
 						.getName());
@@ -308,21 +312,17 @@ public class DaoClassRender extends BaseClassRender {
 			} else {
 				methodName = "set" + StringHelper.getMethodNameForBoolean(StringHelper.sanitizeForAttributName(attribut.getName()));
 			}
-			String setObj = classNameLowerCase + "." + methodName + "("
-					+ attribut.getName() + ")";
+			String setObj = classNameLowerCase + "." + methodName + "("	+ rsCreated + ")";
 			output.append(tabulation + tabulation + tabulation + setObj + ";" + lineSeparator);
-			output.append(lineSeparator);
 			if (attribut.isForeignKey() && attribut.getRawName().toLowerCase().endsWith("_cd")) {
 				output.append(StringHelper.lineSeparator);
-				String locale = attribut.getName().substring(0, attribut.getName().length() - 2) + "Locale";
 				String rawLocale = attribut.getRawName().substring(0, attribut.getRawName().length() - 2) + "locale";
 				methodName = methodName.substring(0, methodName.length() - 2) + "Locale";
-				output.append( tabulation + tabulation + tabulation + locale + " = " + "rs.getObject(\"" +
-						rawLocale + "\") != null ? rs.getString(\"" + rawLocale + "\") : null;"+ lineSeparator);
-				output.append(tabulation + tabulation + tabulation + classNameLowerCase + "." + methodName + "(" + locale +  ");" + lineSeparator);
-				output.append(lineSeparator);
+				String inner =  "rs.getObject(\"" +	rawLocale + "\") != null ? rs.getString(\"" + rawLocale + "\") : null;";
+				output.append(tabulation + tabulation + tabulation + classNameLowerCase + "." + methodName + "(" + inner +  ")" + lineSeparator);
 			}
 		}
+		output.append(lineSeparator);
 		output.append(tabulation + tabulation + tabulation + "return "+classNameLowerCase+";"+lineSeparator);
 		output.append(tabulation + tabulation + "}" + lineSeparator);
 		output.append(tabulation + "}" + lineSeparator);
