@@ -1,5 +1,6 @@
 package in.thirumal.render;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +26,6 @@ public class ModelClassRender extends BaseClassRender {
 		String lineSeparator 	= 	StringHelper.lineSeparator;
 		String tabulation		=	StringHelper.tabulation;
 		Entity entity			=	getEntity();
-		System.out.println(entity.getName());
 		
 		entity.addInterface("java.io.Serializable");		
 		output.append("package " + entity.getModelPackage() + ";");		
@@ -38,7 +38,6 @@ public class ModelClassRender extends BaseClassRender {
 		String pckgPath = null;
 		
 		for(Attribute eachattr : entity.getAlAttr()){
-			// System.out.println("attribute: " + eachattr.getJavaPackagePath() + " " + eachattr.getJavaType() + " " + eachattr.getName() + " " + eachattr.getRawName() + " " + eachattr.getSqlType());;
 			javaType = eachattr.getJavaType();
 			pckgPath = eachattr.getJavaPackagePath();			
 			if(!javaTypesPckgPaths.containsKey(javaType)) {				
@@ -49,7 +48,12 @@ public class ModelClassRender extends BaseClassRender {
 		for(String path : javaTypesPckgPaths.values()){
 			output.append("import "+path+";"+lineSeparator);
 		}
-		
+		output.append("import lombok.AllArgsConstructor;\r\n" + 
+				"import lombok.Builder;\r\n" + 
+				"import lombok.Getter;\r\n" + 
+				"import lombok.NoArgsConstructor;\r\n" + 
+				"import lombok.Setter;\r\n" + 
+				"import lombok.ToString;");
 		output.append(lineSeparator);
 		
 		/*= avoid redondant import */
@@ -64,7 +68,16 @@ public class ModelClassRender extends BaseClassRender {
 				interfacesToOuput += interfaceToOuput + (i == (interfaceCanonicalNamesLenght -1) ? " " : ", ");
 			}
 		}
-     	output.append("/**" + lineSeparator + " *" + lineSeparator + " * @author திருமால்" + lineSeparator + " *" + lineSeparator + " */" + lineSeparator);
+     	output.append("/**\r\n" + 
+     			" * Generated using erm-postgresql-spring-boot project\r\n"+
+     			" * @see <a href=\"https://github.com/M-Thirumal/erm-postgresql-spring-boot\">erm-postgresql-spring-boot</a>\r\n" +
+     			" * @author திருமால்\r\n" + 
+     			" * @since "+ LocalDate.now() +"\r\n" + 
+     			" * @version 1.0\r\n" + 
+     			" */" + lineSeparator);
+     	output.append("@Getter@Setter\r\n" + 
+     			"@NoArgsConstructor@AllArgsConstructor\r\n" + 
+     			"@ToString@Builder" + lineSeparator);
 		output.append("public class " + entity.getName() +(entity.hasParent() ? " extends "+entity.getParentClass() : "")+(interfacesToOuput != null ? interfacesToOuput : "")+" {" + lineSeparator + lineSeparator);
 		output.append(tabulation+"private static final long serialVersionUID = 1L;"+lineSeparator+lineSeparator);
 
@@ -88,6 +101,7 @@ public class ModelClassRender extends BaseClassRender {
 		} else {
 			output.append(lineSeparator);
 		}
+		output.append(tabulation + "//TODO override hashcode & equals method" + lineSeparator);
 		/*
 		//Default constructor
 		output.append(tabulation+ "//Default constructor" + lineSeparator);	

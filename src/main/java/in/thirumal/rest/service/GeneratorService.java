@@ -41,6 +41,7 @@ public class GeneratorService implements GenericService {
 			LOGGER.info("Impossible to create the root folder: "+targetConfig.getRootFolder());
 		}	
 		writeModel(entities);
+		LOGGER.info("Model generated successfully");
 		return true;
 	}
 
@@ -51,7 +52,7 @@ public class GeneratorService implements GenericService {
 		String 	classContent = null;
 		/* Writing model*/
 		for(Entity entity : entities){			
-			//Setting pckg from the Configuration
+			//Setting package from the Configuration
 			entity.setModelPackage(targetConfig.getPackageModel());			
 			className =	entity.getName();
 			fileName = className + ".java";
@@ -62,7 +63,6 @@ public class GeneratorService implements GenericService {
 				LOGGER.severe(entity.getRawName() + "Model is not written: " + ex.getMessage());
 			}
 			try {
-				//LOGGER.info("Create model " + className + ". Target path: " + targetDirectory + File.separator + fileName);
 				ERM2BeansHelper.writeFile(classContent, targetConfig.getModelFolder(), fileName, false);
 			} catch (Exception ex) {
 				LOGGER.severe("Impossible to create the Model "+ className +". Exception message: " + ex.getMessage());
