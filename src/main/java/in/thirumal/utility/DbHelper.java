@@ -2,15 +2,8 @@ package in.thirumal.utility;
 
 
 import java.security.InvalidParameterException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.logging.Logger;
-
-import org.apache.commons.lang3.StringUtils;
 /**
  * @author Thirumal
  *
@@ -54,6 +47,9 @@ public final class DbHelper {
 		javaTypesResultSet.put("jsonb", "%s.getString(%s)");
 		javaTypesResultSet.put("PGInterval", "%s.getObject(%s)");
 		javaTypesResultSet.put("OffsetDateTime", "%s.getObject(%s)");
+		javaTypesResultSet.put("LocalDate", "%s.getObject(%s)");
+		javaTypesResultSet.put("PGpoint", "%s.getObject(%s)");
+		
 		//Enum
 		javaTypesResultSet.put("nature_of_money", "%s.getString(%s)");
 		javaTypesResultSet.put("nature_of_debt", "%s.getString(%s)");
@@ -62,6 +58,7 @@ public final class DbHelper {
 		javaTypesResultSet.put("city", "%s.getString(%s)");
 		javaTypesResultSet.put("postal_code", "%s.getString(%s)");
 		javaTypesResultSet.put("case_stage", "%s.getString(%s)");
+		javaTypesResultSet.put("asset_class", "%s.getString(%s)");
 	}
 	
 	private static void mapJavaTypesPrepareStatementSet(){
@@ -97,6 +94,9 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("citext", "%s.setString(%s, %s)");
 		javaTypesPreparedStatementSet.put("jsonb", "%s.setString(%s, %s)");
 		javaTypesPreparedStatementSet.put("interval", "%s.setObject(%s, %s)");
+		javaTypesPreparedStatementSet.put("OffsetDateTime", "%s.setObject(%s, OffsetDateTime.class)");
+		javaTypesPreparedStatementSet.put("LocalDate", "%s.setObject(%s, LocalDate.class)");
+		javaTypesPreparedStatementSet.put("PGpoint", "%s.setObject(%s, PGpoint.class)");
 		//Enum
 		javaTypesPreparedStatementSet.put("nature_of_money", "%s.setString(%s, %s)");
 		javaTypesPreparedStatementSet.put("nature_of_debt", "%s.setString(%s, %s)");
@@ -105,6 +105,7 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("city", "%s.setString(%s, %s)");
 		javaTypesPreparedStatementSet.put("postal_code", "%s.setString(%s, %s)");
 		javaTypesPreparedStatementSet.put("case_stage", "%s.setString(%s, %s)");
+		javaTypesPreparedStatementSet.put("asset_class", "%s.setString(%s, %s)");
 	}
 	
 	private static void	mapSQLTypesJavaTypes(){
@@ -145,7 +146,7 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("unsigned smallint", "Integer");
 		sqlTypesJavaTypes.put("unsigned int", "Integer");
 		sqlTypesJavaTypes.put("unsigned bigint", "BigDecimal");
-		sqlTypesJavaTypes.put("int identity", "Integer");
+		sqlTypesJavaTypes.put("_int4", "Integer");
 		
 		sqlTypesJavaTypes.put("binary", "byte[]");
 		sqlTypesJavaTypes.put("varbinary", "byte[]");
@@ -158,7 +159,7 @@ public final class DbHelper {
 		
 		sqlTypesJavaTypes.put("bit", "Boolean");
 		
-		sqlTypesJavaTypes.put("date", "Date");
+		sqlTypesJavaTypes.put("date", "LocalDate");
 		
 		/* BASE VERSION
 		sqlTypesJavaTypes.put("time", "Time");
@@ -168,13 +169,13 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("timestamp", "Timestamp");
 		sqlTypesJavaTypes.put("datetimeoffset", "DateTimeOffset");*/
 		
-		sqlTypesJavaTypes.put("time", "Date");
-		sqlTypesJavaTypes.put("smalldatetime", "Date");
-		sqlTypesJavaTypes.put("datetime", "Date");
-		sqlTypesJavaTypes.put("datetime2", "Date");
-		sqlTypesJavaTypes.put("timestamp", "Date");
+		sqlTypesJavaTypes.put("time", "LocalDate");
+		sqlTypesJavaTypes.put("smalldatetime", "LocalDate");
+		sqlTypesJavaTypes.put("datetime", "LocalDate");
+		sqlTypesJavaTypes.put("datetime2", "LocalDate");
+		sqlTypesJavaTypes.put("timestamp", "LocalDate");
 		sqlTypesJavaTypes.put("timestamptz", "OffsetDateTime");
-		sqlTypesJavaTypes.put("datetimeoffset", "Date");
+		sqlTypesJavaTypes.put("datetimeoffset", "LocalDate");
 		
 		// PostgreSQL 
 		sqlTypesJavaTypes.put("serial", "Long");
@@ -189,6 +190,7 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("citext", "String");
 		sqlTypesJavaTypes.put("jsonb", "String");
 		sqlTypesJavaTypes.put("interval", "PGInterval");
+		sqlTypesJavaTypes.put("point", "PGpoint");
 		//ENUM
 		sqlTypesJavaTypes.put("nature_of_money", "String");
 		sqlTypesJavaTypes.put("nature_of_debt", "String");
@@ -197,6 +199,7 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("postal_code", "String");
 		sqlTypesJavaTypes.put("city", "String");
 		sqlTypesJavaTypes.put("case_stage", "String");
+		sqlTypesJavaTypes.put("asset_class", "String");
 	}
 	
 	private static void mapSimpleNameCanonicalName(){
@@ -221,6 +224,9 @@ public final class DbHelper {
 		simpleNamesCanonicalNames.put("jsonb", "java.lang.String");
 		simpleNamesCanonicalNames.put("PGInterval", "org.postgresql.util.PGInterval");
 		simpleNamesCanonicalNames.put("OffsetDateTime", "java.time.OffsetDateTime");
+		simpleNamesCanonicalNames.put("PGpoint", "org.postgresql.geometric.PGpoint");
+		simpleNamesCanonicalNames.put("LocalDate", "java.time.LocalDate");
+		
 		//Enum
 		simpleNamesCanonicalNames.put("nature_of_money", "java.lang.String");
 		simpleNamesCanonicalNames.put("nature_of_debt", "java.lang.String");
@@ -229,6 +235,7 @@ public final class DbHelper {
 		simpleNamesCanonicalNames.put("postal_code", "java.lang.String");
 		simpleNamesCanonicalNames.put("city", "java.lang.String");
 		simpleNamesCanonicalNames.put("case_stage", "java.lang.String");
+		simpleNamesCanonicalNames.put("asset_class", "java.lang.String");
 	}
 	
 	
@@ -242,7 +249,7 @@ public final class DbHelper {
 		if(javaTypesResultSet.containsKey(javaType)){
 			return javaTypesResultSet.get(javaType);
 		}		
-		throw new Exception("Impossible to map the Java type "+javaType+" with a ResultSet get method.");
+		throw new Exception("Impossible to map the Java type " + javaType + " with a ResultSet get method.");
 	}
 	
 	public static String javaTypeToPrepareStatementSet(String javaType) throws Exception {
@@ -276,7 +283,7 @@ public final class DbHelper {
 				return "String";
 			}			
 			if(sqlTypeStrLowerCase.matches("datetimeoffset[(]([0-9]{1,})[)]")){
-				return "Date";
+				return "LocalDate";
 			}			
 		}		
 		throw new Exception("Impossible to map the SQL type "+ sqlType +" with a Java Type.");		
