@@ -35,9 +35,10 @@ public class SchemaDao implements GenericDao<Entity> {
 	
 	
 	@Autowired
-	public SchemaDao(JdbcTemplate jdbcTemplate) {
+	public SchemaDao(JdbcTemplate jdbcTemplate) throws SQLException {
 		super();
 		this.jdbcTemplate = jdbcTemplate;
+		connectionForAuto = this.jdbcTemplate.getDataSource().getConnection();
 	}
 
 	@Override
@@ -45,7 +46,6 @@ public class SchemaDao implements GenericDao<Entity> {
 		ResultSet resultSet = this.jdbcTemplate.execute(new ConnectionCallback<ResultSet>() {
 	        @Override
 	        public ResultSet doInConnection(Connection connection) throws SQLException {
-	        	connectionForAuto = connection; 
 	        	metadata = connection.getMetaData();
 	            return connection.getMetaData().getColumns(databaseName, schemaName, null, null);
 	        }

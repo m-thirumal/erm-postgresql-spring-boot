@@ -49,6 +49,7 @@ public final class DbHelper {
 		javaTypesResultSet.put("OffsetDateTime", "%s.getObject(%s)");
 		javaTypesResultSet.put("LocalDate", "%s.getObject(%s)");
 		javaTypesResultSet.put("PGpoint", "%s.getObject(%s)");
+		javaTypesResultSet.put("daterange", "%s.getObject(%s)");
 		
 		//Enum
 		javaTypesResultSet.put("nature_of_money", "%s.getString(%s)");
@@ -59,6 +60,11 @@ public final class DbHelper {
 		javaTypesResultSet.put("postal_code", "%s.getString(%s)");
 		javaTypesResultSet.put("case_stage", "%s.getString(%s)");
 		javaTypesResultSet.put("asset_class", "%s.getString(%s)");
+		javaTypesResultSet.put("legal_provision", "%s.getString(%s)");
+		javaTypesResultSet.put("_tags", "%s.getString(%s)");
+		javaTypesResultSet.put("litigation_party_type", "%s.getString(%s)");
+		javaTypesResultSet.put("news_edition", "%s.getString(%s)");
+		javaTypesResultSet.put("mode_of_communication", "%s.getString(%s)");
 	}
 	
 	private static void mapJavaTypesPrepareStatementSet(){
@@ -97,6 +103,7 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("OffsetDateTime", "%s.setObject(%s, OffsetDateTime.class)");
 		javaTypesPreparedStatementSet.put("LocalDate", "%s.setObject(%s, LocalDate.class)");
 		javaTypesPreparedStatementSet.put("PGpoint", "%s.setObject(%s, PGpoint.class)");
+		javaTypesPreparedStatementSet.put("DateRange", "%s.setObject(%s, %s)");
 		//Enum
 		javaTypesPreparedStatementSet.put("nature_of_money", "%s.setString(%s, %s)");
 		javaTypesPreparedStatementSet.put("nature_of_debt", "%s.setString(%s, %s)");
@@ -106,6 +113,11 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("postal_code", "%s.setString(%s, %s)");
 		javaTypesPreparedStatementSet.put("case_stage", "%s.setString(%s, %s)");
 		javaTypesPreparedStatementSet.put("asset_class", "%s.setString(%s, %s)");
+		javaTypesPreparedStatementSet.put("legal_provision", "%s.getString(%s)");
+		javaTypesPreparedStatementSet.put("_tags", "%s.getString(%s)");
+		javaTypesPreparedStatementSet.put("litigation_party_type", "%s.getString(%s)");
+		javaTypesPreparedStatementSet.put("news_edition", "%s.getString(%s)");
+		javaTypesPreparedStatementSet.put("mode_of_communication", "%s.getString(%s)");
 	}
 	
 	private static void	mapSQLTypesJavaTypes(){
@@ -191,6 +203,7 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("jsonb", "String");
 		sqlTypesJavaTypes.put("interval", "PGInterval");
 		sqlTypesJavaTypes.put("point", "PGpoint");
+		sqlTypesJavaTypes.put("daterange", "DateRange");
 		//ENUM
 		sqlTypesJavaTypes.put("nature_of_money", "String");
 		sqlTypesJavaTypes.put("nature_of_debt", "String");
@@ -200,6 +213,11 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("city", "String");
 		sqlTypesJavaTypes.put("case_stage", "String");
 		sqlTypesJavaTypes.put("asset_class", "String");
+		sqlTypesJavaTypes.put("legal_provision", "String");
+		sqlTypesJavaTypes.put("_tags", "String");
+		sqlTypesJavaTypes.put("litigation_party_type", "String");
+		sqlTypesJavaTypes.put("news_edition", "String");
+		sqlTypesJavaTypes.put("mode_of_communication", "String");
 	}
 	
 	private static void mapSimpleNameCanonicalName(){
@@ -226,6 +244,7 @@ public final class DbHelper {
 		simpleNamesCanonicalNames.put("OffsetDateTime", "java.time.OffsetDateTime");
 		simpleNamesCanonicalNames.put("PGpoint", "org.postgresql.geometric.PGpoint");
 		simpleNamesCanonicalNames.put("LocalDate", "java.time.LocalDate");
+		simpleNamesCanonicalNames.put("DateRange", "com.enkindle.persistence.code.shared.DateRange");
 		
 		//Enum
 		simpleNamesCanonicalNames.put("nature_of_money", "java.lang.String");
@@ -236,6 +255,11 @@ public final class DbHelper {
 		simpleNamesCanonicalNames.put("city", "java.lang.String");
 		simpleNamesCanonicalNames.put("case_stage", "java.lang.String");
 		simpleNamesCanonicalNames.put("asset_class", "java.lang.String");
+		simpleNamesCanonicalNames.put("legal_provision", "String");
+		simpleNamesCanonicalNames.put("_tags", "String");
+		simpleNamesCanonicalNames.put("litigation_party_type", "String");
+		simpleNamesCanonicalNames.put("news_edition", "String");
+		simpleNamesCanonicalNames.put("mode_of_communication", "String");
 	}
 	
 	

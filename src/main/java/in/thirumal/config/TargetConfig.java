@@ -23,4 +23,6 @@ public class TargetConfig {
 	private String packageDao;
 	private String packageModel;
 	private String rootFolder;
+	private String modelFolder;
+	private String daoFolder;
 }
