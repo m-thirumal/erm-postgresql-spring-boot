@@ -3,6 +3,8 @@
  */
 package in.thirumal.rest.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,8 @@ public class GeneratorService implements GenericService {
 	@Override
 	public boolean generate(String databaseName, String schemaName) {
 		System.out.println(targetConfig.toString());
-		genericDao.list(databaseName, schemaName);
+		List<Entity> entities = genericDao.list(databaseName, schemaName);
+		entities.stream().forEach(System.out::println);
 		return true;
 	}
 	

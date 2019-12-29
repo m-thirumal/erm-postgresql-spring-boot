@@ -31,6 +31,8 @@ public class SchemaDao implements GenericDao<Entity> {
 
 	private JdbcTemplate jdbcTemplate;
 	DatabaseMetaData metadata;
+	Connection connectionForAuto;
+	
 	
 	@Autowired
 	public SchemaDao(JdbcTemplate jdbcTemplate) {
@@ -43,6 +45,7 @@ public class SchemaDao implements GenericDao<Entity> {
 		ResultSet resultSet = this.jdbcTemplate.execute(new ConnectionCallback<ResultSet>() {
 	        @Override
 	        public ResultSet doInConnection(Connection connection) throws SQLException {
+	        	connectionForAuto = connection; 
 	        	metadata = connection.getMetaData();
 	            return connection.getMetaData().getColumns(databaseName, schemaName, null, null);
 	        }
@@ -50,7 +53,7 @@ public class SchemaDao implements GenericDao<Entity> {
 		return getEntities(resultSet, databaseName);
 	}
 	
-	public List<Entity> getEntities(ResultSet resultSet, String dbName) {
+	private List<Entity> getEntities(ResultSet resultSet, String dbName) {
 		List<Entity> alTables = new ArrayList<>();
 		Entity currentEntite = null;
 		ArrayList<Attribute> alAttributs = null;
@@ -138,7 +141,6 @@ public class SchemaDao implements GenericDao<Entity> {
 				} 
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return alTables;
@@ -147,7 +149,7 @@ public class SchemaDao implements GenericDao<Entity> {
 	public boolean columnIsAutoincrement(String db, String tablePrefix, String tableName, String columnName) {
 		boolean result = false;
 		ResultSetMetaData rsMetadata = null;
-		try (ResultSet rs = this.jdbcTemplate.getDataSource().getConnection().createStatement()
+		try (ResultSet rs = connectionForAuto.createStatement()
 				.executeQuery("SELECT "+columnName+" FROM "+tablePrefix+"."+tableName)) {
 			rs.next();
 			rsMetadata = rs.getMetaData();
@@ -166,22 +168,12 @@ public class SchemaDao implements GenericDao<Entity> {
 			String query = "SELECT ["+tableName+"], [Description] FROM ["+db+"].[Codes].["+tableNameToLookup+"] WHERE [Locale_Cd] = 1";
 			String key = null;
 			Integer value = null;
-			try (ResultSet rs = this.jdbcTemplate.getDataSource().getConnection().createStatement()
+			try (ResultSet rs = connectionForAuto.createStatement()
 					.executeQuery(query)) {
 				while(rs.next()){
-					key = rs.getString("Description");
-					//formatting
-					key = key.toUpperCase();
-					key = key.replaceAll(" ", "_");
-					key = key.replaceAll("\\(", "");
-					key = key.replaceAll("\\)", "");
-					key = key.replaceAll(",", "");
-					key = key.replaceAll("-", "_");
-					key = key.replaceAll("&", "");
-					key = key.replaceAll("/", "");
-					key = key.replaceAll("\\.", "_");
-					key = StringUtils.stripAccents(key);
-					key = key.replaceAll("[^a-zA-Z0-9_]", "_");
+					key = rs.getString("Description").toUpperCase().replaceAll(" ", "_").replaceAll("\\(", "").replaceAll("\\)", "").replaceAll(",", "")
+							.replaceAll("-", "_").replaceAll("&", "").replaceAll("/", "").replaceAll("\\.", "_");
+					key = StringUtils.stripAccents(key).replaceAll("[^a-zA-Z0-9_]", "_");
 					//check if startsWithNumber
 					//add underscore to conform to the Java namming allowed
 					if(Character.isDigit(key.charAt(0))){
