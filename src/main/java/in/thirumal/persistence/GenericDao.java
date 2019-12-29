@@ -9,5 +9,5 @@ package in.thirumal.persistence;
  */
 public interface GenericDao<T> {
 
-	T list(String schema);
+	T list(String databaseName, String schemaName);
 }

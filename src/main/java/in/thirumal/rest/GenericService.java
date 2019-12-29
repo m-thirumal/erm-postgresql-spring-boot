@@ -9,6 +9,6 @@ package in.thirumal.rest;
  */
 public interface GenericService {
 
-	boolean generate(String schemaName);
+	boolean generate(String databaseName, String schemaName);
 	
 }

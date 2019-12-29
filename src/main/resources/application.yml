@@ -7,7 +7,7 @@ spring:
   datasource:
     jdbc-url: jdbc:postgresql://localhost:5432/icms
     url: ${spring.datasource.jdbc-url}
-    username: thirumal
+    username: postgres
     password: thirumal
 
 name: erm-postgresql-sping-boot

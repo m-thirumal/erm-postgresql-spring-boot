@@ -25,9 +25,9 @@ public class GeneratorService implements GenericService {
 	private GenericDao<Entity> genericDao;
 	
 	@Override
-	public boolean generate(String schemaName) {
+	public boolean generate(String databaseName, String schemaName) {
 		System.out.println(targetConfig.toString());
-		genericDao.list("j");
+		genericDao.list(databaseName, schemaName);
 		return true;
 	}
 	

@@ -21,9 +21,11 @@ public class GeneratorController {
 
 	@Autowired
 	GenericService genericService;
-	@GetMapping("/{schemaName}")
-	public boolean generatedao(@PathVariable("schemaName") String schemaName) {
-		return genericService.generate(schemaName);
+	
+	@GetMapping("/{databaseName}/{schemaName}")
+	public boolean generatedao(@PathVariable("databaseName") String databaseName, 
+			@PathVariable("schemaName") String schemaName) {
+		return genericService.generate(databaseName, schemaName);
 	}
 	
 }
