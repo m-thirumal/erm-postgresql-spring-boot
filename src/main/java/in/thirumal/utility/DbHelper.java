@@ -49,7 +49,7 @@ public final class DbHelper {
 		javaTypesResultSet.put("OffsetDateTime", "%s.getObject(%s)");
 		javaTypesResultSet.put("LocalDate", "%s.getObject(%s)");
 		javaTypesResultSet.put("PGpoint", "%s.getObject(%s)");
-		javaTypesResultSet.put("daterange", "%s.getObject(%s)");
+		javaTypesResultSet.put("DateRange", "%s.getObject(%s)");
 		
 		//Enum
 		javaTypesResultSet.put("nature_of_money", "%s.getString(%s)");
@@ -99,7 +99,7 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("UUID", "%s.setObject(%s, %s)");
 		javaTypesPreparedStatementSet.put("citext", "%s.setString(%s, %s)");
 		javaTypesPreparedStatementSet.put("jsonb", "%s.setString(%s, %s)");
-		javaTypesPreparedStatementSet.put("interval", "%s.setObject(%s, %s)");
+		javaTypesPreparedStatementSet.put("PGInterval", "%s.setObject(%s, %s)");
 		javaTypesPreparedStatementSet.put("OffsetDateTime", "%s.setObject(%s, OffsetDateTime.class)");
 		javaTypesPreparedStatementSet.put("LocalDate", "%s.setObject(%s, LocalDate.class)");
 		javaTypesPreparedStatementSet.put("PGpoint", "%s.setObject(%s, PGpoint.class)");

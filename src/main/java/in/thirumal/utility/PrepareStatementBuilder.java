@@ -13,6 +13,7 @@ import in.thirumal.model.Entity;
 public final class PrepareStatementBuilder {
 
 	public enum Action {
+		KEY,
 		LIST,
 		GET,
 		GETCK,
@@ -36,7 +37,10 @@ public final class PrepareStatementBuilder {
 			break;			
 			case GETCK:
 				result = getComp(dao);
-			break;			
+			break;	
+			case KEY:
+				result = key(dao);
+			break;
 			case LIST:
 				result = list(dao);
 			break;			
@@ -58,7 +62,7 @@ public final class PrepareStatementBuilder {
 	
 	private static String getComp(Entity dao) {
 		StringBuilder strBuilder = new StringBuilder();
-		strBuilder.append("SELECT * FROM " + dao.getTablePrefix() + "." + dao.getRawName());
+		strBuilder.append("${" + dao.getName()+ "}");
 		ArrayList<Attribute> attributes = dao.getAlAttr();
 		List<String> pkAttributes = new ArrayList<>();
 		for (Attribute attr: attributes) {
@@ -172,12 +176,16 @@ public final class PrepareStatementBuilder {
 	}
 	
 	private static final String list(Entity dao){
+		return "${" + dao.getName()+ "}";
+	}
+	
+	private static final String key(Entity dao){
 		return "SELECT * FROM " + dao.getTablePrefix() + "." + dao.getRawName();
 	}
 	
 	private static final String get(Entity dao) {
 		StringBuilder strBuilder = new StringBuilder();
-		strBuilder.append("SELECT * FROM " + dao.getTablePrefix() + "." + dao.getRawName());
+		strBuilder.append("${" + dao.getName()+ "}");
 		ArrayList<Attribute> attributes = dao.getAlAttr();
 		String whereStatement = null;
 		for (Attribute attribut : attributes) {

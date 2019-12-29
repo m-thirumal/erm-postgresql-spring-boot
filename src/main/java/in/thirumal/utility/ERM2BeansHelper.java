@@ -49,8 +49,13 @@ public final class ERM2BeansHelper {
 				queryEscaped = query.replaceAll("=", "\\=");
 			} else {
 				queryEscaped = query;
-			}		
-			String queryBuilt = entity.getName()+"."+action.name().toLowerCase()+"="+queryEscaped+StringHelper.lineSeparator;
+			}	
+			String queryBuilt;
+			if (action.equals(PrepareStatementBuilder.Action.KEY)) {
+				queryBuilt = entity.getName() + "=" + queryEscaped+StringHelper.lineSeparator;
+			} else {
+				queryBuilt = entity.getName()+"."+action.name().toLowerCase()+"="+queryEscaped+StringHelper.lineSeparator;
+			}
 			byte[] queryBuiltAsBits = queryBuilt.getBytes("UTF-8");
 			buffWriter.write(new String(queryBuiltAsBits,"UTF-8"));
 			buffWriter.close();
