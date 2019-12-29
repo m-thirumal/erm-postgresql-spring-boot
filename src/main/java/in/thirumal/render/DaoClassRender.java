@@ -124,7 +124,21 @@ public class DaoClassRender extends BaseClassRender {
 		
 		/* Create */
 		output.append(tabulation+"@Override" + lineSeparator);
-		output.append(tabulation+"public "+ modelFileName + " create(" + modelFileName  + " " + classNameLowerCase + ", Identifier identifier) {"+ lineSeparator);
+		output.append(tabulation+"public " + modelFileName + " create(" + modelFileName  + " " + classNameLowerCase + ", Identifier identifier) { "+ lineSeparator);
+		/*if (pkSize == 2) {
+			output.append(tabulation + tabulation + "return get(Integer.parseInt(holder.getKeys().get(\"" + pkAttributes.get(0) +
+				"\").toString()), Integer.parseInt(holder.getKeys().get(\""+ pkAttributes.get(1) + "\").toString()));" +  lineSeparator);
+			output.append(tabulation + "}" + lineSeparator + lineSeparator );
+			//output.append(tabulation + "public " + modelFileName + " get(Integer " + pkAttributes.get(0) + ", Integer " + pkAttributes.get(1) + ") {" + lineSeparator);
+			//	output.append(tabulation + tabulation + "return jdbcTemplate.queryForObject(environment.getProperty(\"" + modelFileName +
+				//		".getck\"), new Object[] { " + pkAttributes.get(0) + ", " + pkAttributes.get(1) + 
+					//	" }, new " + modelFileName + "RowMapper());" + lineSeparator + tabulation + "}" + lineSeparator + lineSeparator);
+		} else {*/
+		output.append(tabulation + tabulation + "return get(new Identifier(insert(" + classNameLowerCase + ", identifier)" + ", identifier.getLocaleCd()));" + lineSeparator);
+		output.append(tabulation + "}" + lineSeparator + lineSeparator );
+		/*Insert */
+		output.append(tabulation+"@Override" + lineSeparator);
+		output.append(tabulation+"public Long " + "insert(" + modelFileName  + " " + classNameLowerCase + ", Identifier identifier) {"+ lineSeparator);
 		output.append(tabulation + tabulation + "KeyHolder holder = new GeneratedKeyHolder();" + lineSeparator +
 				tabulation + tabulation + "jdbcTemplate.update(new PreparedStatementCreator()  {" + lineSeparator +
 				tabulation + tabulation + tabulation + "@Override" + lineSeparator +
@@ -151,7 +165,6 @@ public class DaoClassRender extends BaseClassRender {
 					methodName = StringHelper.getMethodNameForBoolean(StringHelper.sanitizeForAttributName(attribut.getName()));
 				}
 				methodName += "()";
-				// output.append("ps.setInt("+(i+1)+", "+classNameLowerCase+"."+methodName+");"+StringHelper.lineSeparator);
 				preparementSet = DbHelper.createPreparementSet("ps", (psIndex),
 						attribut.getJavaType(), attribut.getSqlType(), classNameLowerCase + "."	+ methodName, true);
 				output.append(tabulation+tabulation+ tabulation + tabulation + preparementSet);
@@ -161,21 +174,10 @@ public class DaoClassRender extends BaseClassRender {
 		output.append(tabulation+tabulation+ tabulation + tabulation +"return ps;" + lineSeparator);
 		output.append(tabulation+tabulation+ tabulation + "}" + lineSeparator);
 		output.append(tabulation+tabulation+  "}, holder);" + lineSeparator);
-		if (pkSize == 2) {
-			output.append(tabulation + tabulation + "return get(Integer.parseInt(holder.getKeys().get(\"" + pkAttributes.get(0) +
-					"\").toString()), Integer.parseInt(holder.getKeys().get(\""+ pkAttributes.get(1) + "\").toString()));" +  lineSeparator);
-			output.append(tabulation + "}" + lineSeparator + lineSeparator );
-			output.append(tabulation + "public " + modelFileName + " get(Integer " + pkAttributes.get(0) + ", Integer " + pkAttributes.get(1) + ") {" + lineSeparator);
-			output.append(tabulation + tabulation + "return jdbcTemplate.queryForObject(environment.getProperty(\"" + modelFileName +
-					".getck\"), new Object[] { " + pkAttributes.get(0) + ", " + pkAttributes.get(1) + 
-					" }, new " + modelFileName + "RowMapper());" + lineSeparator + tabulation + "}" + lineSeparator + lineSeparator);
-		} else {
-			output.append(tabulation + tabulation + "return get(new Identifier(holder.getKey().longValue(), identifier.getLocaleCd()));" + lineSeparator);
-			output.append(tabulation + "}" + lineSeparator + lineSeparator );
-		}
-		
-		
-		/* get Method */
+		output.append(tabulation + tabulation + "return holder.getKey().longValue();" + lineSeparator);
+		output.append(tabulation + "}" + lineSeparator + lineSeparator );
+			
+		/* Get Method */
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public "+ modelFileName + " get(Identifier identifier) {" +  lineSeparator);
 		output.append(tabulation + tabulation + "try {" + lineSeparator);
