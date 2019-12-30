@@ -310,7 +310,7 @@ public class DaoClassRender extends BaseClassRender {
 				+ lineSeparator +  tabulation + "}" + lineSeparator + lineSeparator);
 		/* RowMapper Class */
 		output.append(tabulation + "RowMapper<" + modelFileName + "> " + classNameLowerCase + "RowMapper = (rs, rowNum) -> {" + lineSeparator + lineSeparator);
-		output.append(tabulation + tabulation +tabulation + modelFileName + " " + classNameLowerCase + " = new " + modelFileName + "();" + lineSeparator);
+		output.append(tabulation + tabulation + modelFileName + " " + classNameLowerCase + " = new " + modelFileName + "();" + lineSeparator);
 /*
 		for (int i = 0, attributesLenght = attributes.size(); i < attributesLenght; i++) {
 			attribut = attributes.get(i);
@@ -339,18 +339,18 @@ public class DaoClassRender extends BaseClassRender {
 				methodName = "set" + StringHelper.getMethodNameForBoolean(StringHelper.sanitizeForAttributName(attribut.getName()));
 			}
 			String setObj = classNameLowerCase + "." + methodName + "("	+ rsCreated + ")";
-			output.append(tabulation + tabulation + tabulation + setObj + ";" + lineSeparator);
+			output.append(tabulation + tabulation + setObj + ";" + lineSeparator);
 			if (attribut.isForeignKey() && attribut.getRawName().toLowerCase().endsWith("_cd")) {
 				output.append(StringHelper.lineSeparator);
 				String rawLocale = attribut.getRawName().substring(0, attribut.getRawName().length() - 2) + "locale";
 				methodName = methodName.substring(0, methodName.length() - 2) + "Locale";
 				String inner =  "rs.getObject(\"" +	rawLocale + "\") != null ? rs.getString(\"" + rawLocale + "\") : null;";
-				output.append(tabulation + tabulation + tabulation + classNameLowerCase + "." + methodName + "(" + inner +  ")" + lineSeparator);
+				output.append(tabulation + tabulation + classNameLowerCase + "." + methodName + "(" + inner +  ")" + lineSeparator);
 			}
 		}
 		output.append(lineSeparator);
-		output.append(tabulation + tabulation + tabulation + "return "+classNameLowerCase+";"+lineSeparator);
-		output.append(tabulation + tabulation + "};" + lineSeparator);
+		output.append(tabulation + tabulation + "return "+classNameLowerCase+";"+lineSeparator);
+		output.append(tabulation + "};" + lineSeparator);
 		//output.append(tabulation + "}" + lineSeparator);
 		output.append(lineSeparator);
 		output.append("}" + lineSeparator);
