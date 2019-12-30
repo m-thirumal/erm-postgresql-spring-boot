@@ -289,6 +289,11 @@ public class DaoClassRender extends BaseClassRender {
 		String pkUppercase = pkInJavaType.substring(0, 1).toUpperCase() + pkInJavaType.substring(1);
 		output.append(tabulation + tabulation + "return getV1(new Identifier(" + classNameLowerCase + ".get" + pkUppercase
 				 + "(), identifier.getLocaleCd()));" + lineSeparator + tabulation + "}" + lineSeparator + lineSeparator);
+		/* Count method*/
+		output.append(tabulation + "@Override\r\n" + 
+				"	public int count(Identifier identifier, String whereClause) {\r\n" + 
+				"		return 0;\r\n" + 
+				"	}" + lineSeparator + lineSeparator);
 		/* Delete method */
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public int delete("+ modelFileName + " " + classNameLowerCase + ") {" +  lineSeparator);
