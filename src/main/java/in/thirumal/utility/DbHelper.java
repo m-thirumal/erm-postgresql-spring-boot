@@ -347,9 +347,9 @@ public final class DbHelper {
 							objectSourceAsName = "new java.sql.Timestamp("+objectSourceAsName+".getTime())";							
 							javaType = "Timestamp";
 							
-				} else if(sqlType.equalsIgnoreCase("date")) {					
+				} /*else if(sqlType.equalsIgnoreCase("date")) {					
 					objectSourceAsName = "new java.sql.Date("+objectSourceAsName+".getTime())";
-				}
+				}*/
 			}
 			result = String.format(psSet, ps, index, objectSourceAsName);
 			if (canBeNull) {
