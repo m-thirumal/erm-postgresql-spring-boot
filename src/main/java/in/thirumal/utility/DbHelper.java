@@ -100,9 +100,9 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("citext", "%s.setString(%s, %s)");
 		javaTypesPreparedStatementSet.put("jsonb", "%s.setString(%s, %s)");
 		javaTypesPreparedStatementSet.put("PGInterval", "%s.setObject(%s, %s)");
-		javaTypesPreparedStatementSet.put("OffsetDateTime", "%s.setObject(%s, OffsetDateTime.class)");
-		javaTypesPreparedStatementSet.put("LocalDate", "%s.setObject(%s, LocalDate.class)");
-		javaTypesPreparedStatementSet.put("PGpoint", "%s.setObject(%s, PGpoint.class)");
+		javaTypesPreparedStatementSet.put("OffsetDateTime", "%s.setObject(%s, %s)");
+		javaTypesPreparedStatementSet.put("LocalDate", "%s.setObject(%s, %s)");
+		javaTypesPreparedStatementSet.put("PGpoint", "%s.setObject(%s, %s)");
 		javaTypesPreparedStatementSet.put("DateRange", "%s.setObject(%s, %s)");
 		//Enum
 		javaTypesPreparedStatementSet.put("nature_of_money", "%s.setString(%s, %s)");

@@ -40,6 +40,7 @@ public class DaoClassRender extends BaseClassRender {
 		addMandatoryPackage("org.springframework.jdbc.support.KeyHolder");
 		addMandatoryPackage("org.springframework.stereotype.Repository");
 		addMandatoryPackage("com.enkindle.exception.ErrorFactory");
+		addMandatoryPackage("com.enkindle.exception.IcmsException");
 		addMandatoryPackage("com.enkindle.persistence.GenericDao");
 	}
 	
