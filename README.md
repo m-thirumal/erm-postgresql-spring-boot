@@ -9,6 +9,8 @@ ERM for postgreSQL
 2. src/main/resources/application.properties
 3. src/main/resources/application-erm-target.yml
 
+#New Data type mapping can be done in DbHelper.java
+
 #Contact Info
 <a href="mailto:m.thirumal@hotmail.com?Subject=erm-postgresql-spring-boot" target="_top">Thirumal</a>
 
