@@ -39,6 +39,7 @@ public class DaoClassRender extends BaseClassRender {
 		addMandatoryPackage("org.springframework.jdbc.support.GeneratedKeyHolder");
 		addMandatoryPackage("org.springframework.jdbc.support.KeyHolder");
 		addMandatoryPackage("org.springframework.stereotype.Repository");
+		addMandatoryPackage("com.enkindle.exception.ErrorFactory");
 		addMandatoryPackage("com.enkindle.persistence.GenericDao");
 	}
 	
@@ -135,7 +136,7 @@ public class DaoClassRender extends BaseClassRender {
 				//		".getck\"), new Object[] { " + pkAttributes.get(0) + ", " + pkAttributes.get(1) + 
 					//	" }, new " + modelFileName + "RowMapper());" + lineSeparator + tabulation + "}" + lineSeparator + lineSeparator);
 		} else {*/
-		output.append(tabulation + tabulation + "return createV1(" + modelFileName + " " + classNameLowerCase + ", identifier).orElse(null);" + lineSeparator);
+		output.append(tabulation + tabulation + "return createV1(" + classNameLowerCase + ", identifier).orElse(null);" + lineSeparator);
 		output.append(tabulation + "}" + lineSeparator + lineSeparator );
 		/* Create V1*/
 		output.append(tabulation+"@Override" + lineSeparator);
@@ -198,14 +199,14 @@ public class DaoClassRender extends BaseClassRender {
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getLocaleCd()," 
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getId()"
 				+ lineSeparator + tabulation + tabulation + tabulation + "}, " +
-				classNameLowerCase + "RowMapper()));" + lineSeparator );
+				classNameLowerCase + "RowMapper));" + lineSeparator );
 		output.append(tabulation + tabulation + "} catch (EmptyResultDataAccessException e) {" + lineSeparator + tabulation + tabulation + 
 				tabulation + "return Optional.empty();" + lineSeparator + tabulation + tabulation + "}" + lineSeparator);
 		output.append(tabulation + "}" + lineSeparator + lineSeparator);
 		/* Get where method */
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public "+ modelFileName + " get(Identifier identifier, String whereClause) {" +  lineSeparator);
-		output.append(tabulation  + tabulation + "return return getV1(identifier, whereClause).orElse(null);" + lineSeparator);
+		output.append(tabulation  + tabulation + "return getV1(identifier, whereClause).orElse(null);" + lineSeparator);
 		output.append(tabulation + "}" + lineSeparator + lineSeparator);
 		/* GetV1 where Optional method */
 		output.append(tabulation + "@Override" + lineSeparator);
