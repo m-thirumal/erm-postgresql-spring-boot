@@ -47,7 +47,7 @@ public final class DbHelper {
 		javaTypesResultSet.put("jsonb", "%s.getString(%s)");
 		javaTypesResultSet.put("PGInterval", "%s.getObject(%s)");
 		javaTypesResultSet.put("OffsetDateTime", "%s.getObject(%s)");
-		javaTypesResultSet.put("LocalDate", "%s.getObject(%s)");
+		javaTypesResultSet.put("LocalDate", "%s.getObject(%s, LocalDate.class)");
 		javaTypesResultSet.put("PGpoint", "%s.getObject(%s)");
 		javaTypesResultSet.put("DateRange", "%s.getObject(%s)");
 		
@@ -391,6 +391,9 @@ public final class DbHelper {
 			result = rs + ".getObject(\"" + name + "\") != null ? "	+ String.format(rsGet, rs, "\"" + name + "\"") + " : null";
 			if (sqlType.equalsIgnoreCase("uuid")) {
 				result = rs + ".getObject(\"" + name + "\") != null ? "	+ String.format(rsGet, ("(java.util.UUID) " + rs), "\"" + name + "\"") + " : null";
+			}
+			if (sqlType.equalsIgnoreCase("date")) {
+				result = rs + ".getObject(\"" + name + "\") != null ? "	+ String.format(rsGet, rs, "\"" + name + "\"") + " : null";
 			}
 		}
 		return result;
