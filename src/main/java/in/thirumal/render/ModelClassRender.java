@@ -70,7 +70,7 @@ public class ModelClassRender extends BaseClassRender {
      	output.append("/**\r\n" + 
      			" * Generated using erm-postgresql-spring-boot project\r\n"+
      			" * @see <a href=\"https://github.com/M-Thirumal/erm-postgresql-spring-boot\">erm-postgresql-spring-boot</a>\r\n" +
-     			" * @author திருமால்\r\n" + 
+     			" * @author erm-postgresql-spring-boot\r\n" + 
      			" * @since "+ LocalDate.now() +"\r\n" + 
      			" * @version 1.0\r\n" + 
      			" */" + lineSeparator);
