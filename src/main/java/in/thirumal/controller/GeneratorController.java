@@ -22,7 +22,7 @@ public class GeneratorController {
 	@Autowired
 	GenericService genericService;
 	
-	@GetMapping("/{databaseName}/{schemaName}")
+	@GetMapping("/")
 	public boolean generatedao(@RequestParam(value = "databaseName", defaultValue = "icms") String databaseName, 
 			@RequestParam(value = "schemaName", defaultValue = "indsolv") String schemaName) {
 		return genericService.generate(databaseName, schemaName);
