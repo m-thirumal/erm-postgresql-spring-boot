@@ -213,11 +213,11 @@ public class DaoClassRender extends BaseClassRender {
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public Optional<"+ modelFileName + "> getV1(Identifier identifier, String whereClause) {" +  lineSeparator);
 		output.append(tabulation + tabulation + "try {" + lineSeparator);
-		output.append(tabulation + tabulation + tabulation + "return jdbcTemplate.queryForObject(environment.getProperty(\"" + modelFileName + ".getBy\" + whereClause" +
+		output.append(tabulation + tabulation + tabulation + "return Optional.of(jdbcTemplate.queryForObject(environment.getProperty(\"" + modelFileName + ".getBy\" + whereClause" +
 				"), new Object[] { "
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getLocaleCd()," 
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getId()"
-				+ lineSeparator + tabulation + tabulation + tabulation + "}, " + classNameLowerCase + "RowMapper);" + lineSeparator );
+				+ lineSeparator + tabulation + tabulation + tabulation + "}, " + classNameLowerCase + "RowMapper));" + lineSeparator );
 		output.append(tabulation + tabulation + "} catch (EmptyResultDataAccessException e) {" + lineSeparator + tabulation + tabulation + 
 				tabulation + "return Optional.empty();" + lineSeparator + tabulation + tabulation + "}" + lineSeparator);
 		output.append(tabulation + "}" + lineSeparator + lineSeparator);
@@ -250,7 +250,7 @@ public class DaoClassRender extends BaseClassRender {
 		/* Update Method */
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public "+ modelFileName + " update(" + modelFileName + " " + classNameLowerCase + ", Identifier identifier) {" +  lineSeparator);
-		output.append(tabulation + tabulation + "return updateV1(loginusernote, identifier).orElse(null);" + lineSeparator 
+		output.append(tabulation + tabulation + "return updateV1(" + classNameLowerCase +  ", identifier).orElse(null);" + lineSeparator 
 				+ tabulation + "}" + lineSeparator + lineSeparator);
 		/* updateV1 method*/
 		output.append(tabulation + "@Override" + lineSeparator);
