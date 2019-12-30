@@ -26,8 +26,9 @@ public class DaoClassRender extends BaseClassRender {
 	private void init(){
 		addMandatoryPackage("java.sql.Connection");
 		addMandatoryPackage("java.sql.PreparedStatement");
-		addMandatoryPackage("java.sql.ResultSet");		
+		//addMandatoryPackage("java.sql.ResultSet");		
 		addMandatoryPackage("java.sql.SQLException");
+		addMandatoryPackage("java.time.LocalDate");
 		addMandatoryPackage("java.util.List");
 		addMandatoryPackage("java.util.Optional");
 		addMandatoryPackage("org.springframework.beans.factory.annotation.Autowired");
