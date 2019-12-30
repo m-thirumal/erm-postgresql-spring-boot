@@ -29,6 +29,7 @@ public class DaoClassRender extends BaseClassRender {
 		addMandatoryPackage("java.sql.ResultSet");		
 		addMandatoryPackage("java.sql.SQLException");
 		addMandatoryPackage("java.util.List");
+		addMandatoryPackage("java.util.Optional");
 		addMandatoryPackage("org.springframework.beans.factory.annotation.Autowired");
 		addMandatoryPackage("org.springframework.core.env.Environment");
 		addMandatoryPackage("org.springframework.jdbc.core.JdbcTemplate");
@@ -134,7 +135,12 @@ public class DaoClassRender extends BaseClassRender {
 				//		".getck\"), new Object[] { " + pkAttributes.get(0) + ", " + pkAttributes.get(1) + 
 					//	" }, new " + modelFileName + "RowMapper());" + lineSeparator + tabulation + "}" + lineSeparator + lineSeparator);
 		} else {*/
-		output.append(tabulation + tabulation + "return get(new Identifier(insert(" + classNameLowerCase + ", identifier)" + ", identifier.getLocaleCd()));" + lineSeparator);
+		output.append(tabulation + tabulation + "return createV1(" + modelFileName + " " + classNameLowerCase + ", identifier).orElse(null);" + lineSeparator);
+		output.append(tabulation + "}" + lineSeparator + lineSeparator );
+		/* Create V1*/
+		output.append(tabulation+"@Override" + lineSeparator);
+		output.append(tabulation+"public Optional<" + modelFileName + "> createV1(" + modelFileName  + " " + classNameLowerCase + ", Identifier identifier) { "+ lineSeparator);
+		output.append(tabulation + tabulation + "return getV1(new Identifier(insert(" + classNameLowerCase + ", identifier)" + ", identifier.getLocaleCd()));" + lineSeparator);
 		output.append(tabulation + "}" + lineSeparator + lineSeparator );
 		/*Insert */
 		output.append(tabulation+"@Override" + lineSeparator);
@@ -180,38 +186,40 @@ public class DaoClassRender extends BaseClassRender {
 		/* Get Method */
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public "+ modelFileName + " get(Identifier identifier) {" +  lineSeparator);
-		output.append(tabulation + tabulation + "try {" + lineSeparator);
-		
-		output.append(tabulation + tabulation + tabulation + "return jdbcTemplate.queryForObject(environment.getProperty(\"" + modelFileName + ".get\"), new Object[] {"
-				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getLocaleCd()," 
-				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getId()"
-				+ lineSeparator + tabulation + tabulation + tabulation + "}, new " +
-				modelFileName + "RowMapper());" + lineSeparator );
-		output.append(tabulation + tabulation + "} catch (EmptyResultDataAccessException e) {" + lineSeparator + tabulation + tabulation + 
-				tabulation + "return null;" + lineSeparator + tabulation + tabulation + "}" + lineSeparator);
+		output.append(tabulation + tabulation + "return getV1(identifier).orElse(null);" + lineSeparator);
 		output.append(tabulation + "}" + lineSeparator + lineSeparator);
 		
+		/*Get Optional */
+		output.append(tabulation + "@Override" + lineSeparator);
+		output.append(tabulation+"public Optional<"+ modelFileName + "> getV1(Identifier identifier) {" +  lineSeparator);
+		output.append(tabulation + tabulation + "try {" + lineSeparator);
+		
+		output.append(tabulation + tabulation + tabulation + "return Optional.of(jdbcTemplate.queryForObject(environment.getProperty(\"" + modelFileName + ".get\"), new Object[] {"
+				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getLocaleCd()," 
+				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getId()"
+				+ lineSeparator + tabulation + tabulation + tabulation + "}, " +
+				classNameLowerCase + "RowMapper()));" + lineSeparator );
+		output.append(tabulation + tabulation + "} catch (EmptyResultDataAccessException e) {" + lineSeparator + tabulation + tabulation + 
+				tabulation + "return Optional.empty();" + lineSeparator + tabulation + tabulation + "}" + lineSeparator);
+		output.append(tabulation + "}" + lineSeparator + lineSeparator);
 		/* Get where method */
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public "+ modelFileName + " get(Identifier identifier, String whereClause) {" +  lineSeparator);
+		output.append(tabulation  + tabulation + "return return getV1(identifier, whereClause).orElse(null);" + lineSeparator);
+		output.append(tabulation + "}" + lineSeparator + lineSeparator);
+		/* GetV1 where Optional method */
+		output.append(tabulation + "@Override" + lineSeparator);
+		output.append(tabulation+"public Optional<"+ modelFileName + "> getV1(Identifier identifier, String whereClause) {" +  lineSeparator);
 		output.append(tabulation + tabulation + "try {" + lineSeparator);
 		output.append(tabulation + tabulation + tabulation + "return jdbcTemplate.queryForObject(environment.getProperty(\"" + modelFileName + ".getBy\" + whereClause" +
 				"), new Object[] { "
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getLocaleCd()," 
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getId()"
-				+ lineSeparator + tabulation + tabulation + tabulation + "}, new " + modelFileName + "RowMapper());" + lineSeparator );
+				+ lineSeparator + tabulation + tabulation + tabulation + "}, " + classNameLowerCase + "RowMapper);" + lineSeparator );
 		output.append(tabulation + tabulation + "} catch (EmptyResultDataAccessException e) {" + lineSeparator + tabulation + tabulation + 
-				tabulation + "return null;" + lineSeparator + tabulation + tabulation + "}" + lineSeparator);
+				tabulation + "return Optional.empty();" + lineSeparator + tabulation + tabulation + "}" + lineSeparator);
 		output.append(tabulation + "}" + lineSeparator + lineSeparator);
-		/* Get where method */
-		/*output.append(tabulation + "@Override" + lineSeparator);
-		output.append(tabulation+"public "+ modelFileName + " get(Integer id, String whereClause) {" +  lineSeparator);
-		output.append(tabulation + tabulation + "try {" + lineSeparator);
-		output.append(tabulation + tabulation + tabulation + "return jdbcTemplate.queryForObject(environment.getProperty(\"" + modelFileName + ".getBy\" + whereClause" +
-				"), new Object[] { id }, new " + modelFileName + "RowMapper());" + lineSeparator );
-		output.append(tabulation + tabulation + "} catch (EmptyResultDataAccessException e) {" + lineSeparator + tabulation + tabulation + 
-				tabulation + "return null;" + lineSeparator + tabulation + tabulation + "}" + lineSeparator);
-		output.append(tabulation + "}" + lineSeparator + lineSeparator);*/
+
 		/* List method*/
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public List<"+ modelFileName + "> list(Identifier identifier) {" +  lineSeparator);
@@ -220,7 +228,7 @@ public class DaoClassRender extends BaseClassRender {
 				"), new Object[] { "
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getLocaleCd()," 
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getId()"
-				+ lineSeparator + tabulation + tabulation + tabulation + " }, new " + modelFileName + "RowMapper());" + lineSeparator );
+				+ lineSeparator + tabulation + tabulation + tabulation + " }, " + classNameLowerCase + "RowMapper);" + lineSeparator );
 		output.append(tabulation + tabulation + "} catch (Exception e) {" + lineSeparator + tabulation + tabulation + 
 				tabulation + "throw new IcmsException(ErrorFactory.DATABASE_EXCEPTION, e.getMessage());" + lineSeparator + tabulation + tabulation + "}" + lineSeparator);
 		output.append(tabulation + "}" + lineSeparator + lineSeparator);
@@ -232,14 +240,19 @@ public class DaoClassRender extends BaseClassRender {
 				"), new Object[] { "
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getLocaleCd()," 
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getId()"
-				+ lineSeparator + tabulation + tabulation + tabulation + " }, new " + modelFileName + "RowMapper());" + lineSeparator );
+				+ lineSeparator + tabulation + tabulation + tabulation + " }, " + classNameLowerCase + "RowMapper);" + lineSeparator );
 		output.append(tabulation + tabulation + "} catch (Exception e) {" + lineSeparator + tabulation + tabulation + 
 				tabulation + "throw new IcmsException(ErrorFactory.DATABASE_EXCEPTION, e.getMessage());" + lineSeparator + tabulation + tabulation + "}" + lineSeparator);
 		output.append(tabulation + "}" + lineSeparator + lineSeparator);
 
-		/* update method*/
+		/* Update Method */
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public "+ modelFileName + " update(" + modelFileName + " " + classNameLowerCase + ", Identifier identifier) {" +  lineSeparator);
+		output.append(tabulation + tabulation + "return updateV1(loginusernote, identifier).orElse(null);" + lineSeparator 
+				+ tabulation + "}" + lineSeparator + lineSeparator);
+		/* updateV1 method*/
+		output.append(tabulation + "@Override" + lineSeparator);
+		output.append(tabulation+"public Optional<"+ modelFileName + "> updateV1(" + modelFileName + " " + classNameLowerCase + ", Identifier identifier) {" +  lineSeparator);
 		output.append(tabulation + tabulation + "jdbcTemplate.update(environment.getProperty(\"" + modelFileName + ".update\"), " + lineSeparator);
 		for (int i = 0, attributesLenght = attributes.size(); i < attributesLenght; i++) {
 			attribut = attributes.get(i);
@@ -274,18 +287,21 @@ public class DaoClassRender extends BaseClassRender {
 		}
 		
 		String pkUppercase = pkInJavaType.substring(0, 1).toUpperCase() + pkInJavaType.substring(1);
-		output.append(tabulation + tabulation + "return get(new Identifier(" + classNameLowerCase + ".get" + pkUppercase
+		output.append(tabulation + tabulation + "return getV1(new Identifier(" + classNameLowerCase + ".get" + pkUppercase
 				 + "(), identifier.getLocaleCd()));" + lineSeparator + tabulation + "}" + lineSeparator + lineSeparator);
 		/* Delete method */
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public int delete("+ modelFileName + " " + classNameLowerCase + ") {" +  lineSeparator);
-		output.append(tabulation + tabulation + tabulation + "return jdbcTemplate.update(environment.getProperty(\"" + 
+		output.append(tabulation + tabulation + "return jdbcTemplate.update(environment.getProperty(\"" + 
 				modelFileName + ".delete\"), " + classNameLowerCase +  ".get" + pkUppercase +  "());" + lineSeparator + tabulation + "}" + lineSeparator
 				+ lineSeparator);
+		/* DeleteV1 method */
+		output.append(tabulation + "@Override" + lineSeparator);
+		output.append(tabulation+"public int deleteV1(Optional<"+ modelFileName + "> " + classNameLowerCase + ") {" +  lineSeparator);
+		output.append(tabulation + tabulation + "return delete(" + classNameLowerCase +".orElseThrow(()->new IcmsException(ErrorFactory.RESOURCE_NOT_FOUND, \"Note is not available\")));"
+				+ lineSeparator +  tabulation + "}" + lineSeparator + lineSeparator);
 		/* RowMapper Class */
-		output.append(tabulation + "class " + modelFileName + "RowMapper implements RowMapper<" + modelFileName + "> {" + lineSeparator + lineSeparator);
-		output.append(tabulation + tabulation + "@Override" + lineSeparator);
-		output.append(tabulation + tabulation + "public " + modelFileName + " mapRow(ResultSet rs, int rowNum) throws SQLException {" + lineSeparator);
+		output.append(tabulation + "RowMapper<" + modelFileName + "> " + classNameLowerCase + "RowMapper = (rs, rowNum) -> {" + lineSeparator + lineSeparator);
 		output.append(tabulation + tabulation +tabulation + modelFileName + " " + classNameLowerCase + " = new " + modelFileName + "();" + lineSeparator);
 /*
 		for (int i = 0, attributesLenght = attributes.size(); i < attributesLenght; i++) {
@@ -326,8 +342,8 @@ public class DaoClassRender extends BaseClassRender {
 		}
 		output.append(lineSeparator);
 		output.append(tabulation + tabulation + tabulation + "return "+classNameLowerCase+";"+lineSeparator);
-		output.append(tabulation + tabulation + "}" + lineSeparator);
-		output.append(tabulation + "}" + lineSeparator);
+		output.append(tabulation + tabulation + "};" + lineSeparator);
+		//output.append(tabulation + "}" + lineSeparator);
 		output.append(lineSeparator);
 		output.append("}" + lineSeparator);
 		output.append(lineSeparator);
