@@ -149,9 +149,10 @@ public class DaoClassRender extends BaseClassRender {
 		output.append(tabulation+"@Override" + lineSeparator);
 		output.append(tabulation+"public Long " + "insert(" + modelFileName  + " " + classNameLowerCase + ", Identifier identifier) {"+ lineSeparator);
 		output.append(tabulation + tabulation + "KeyHolder holder = new GeneratedKeyHolder();" + lineSeparator +
-				tabulation + tabulation + "jdbcTemplate.update(new PreparedStatementCreator()  {" + lineSeparator +
-				tabulation + tabulation + tabulation + "@Override" + lineSeparator +
-				tabulation + tabulation + tabulation + "public PreparedStatement createPreparedStatement(Connection con) throws SQLException {" + lineSeparator +
+				//tabulation + tabulation + "jdbcTemplate.update(new PreparedStatementCreator()  {" + lineSeparator +
+				//tabulation + tabulation + tabulation + "@Override" + lineSeparator +
+				//tabulation + tabulation + tabulation + "public PreparedStatement createPreparedStatement(Connection con) throws SQLException {" + lineSeparator +
+				tabulation + tabulation + "jdbcTemplate.update(con -> {" + lineSeparator +
 				tabulation + tabulation + tabulation + "PreparedStatement ps = con.prepareStatement(environment.getProperty(\"" + 
 				modelFileName + ".create\"), "); 
 		if (pkSize == 2) {
@@ -181,7 +182,7 @@ public class DaoClassRender extends BaseClassRender {
 
 		}
 		output.append(tabulation+tabulation+ tabulation + tabulation +"return ps;" + lineSeparator);
-		output.append(tabulation+tabulation+ tabulation + "}" + lineSeparator);
+		//output.append(tabulation+tabulation+ tabulation + "}" + lineSeparator);
 		output.append(tabulation+tabulation+  "}, holder);" + lineSeparator);
 		output.append(tabulation + tabulation + "return holder.getKey().longValue();" + lineSeparator);
 		output.append(tabulation + "}" + lineSeparator + lineSeparator );
@@ -308,6 +309,12 @@ public class DaoClassRender extends BaseClassRender {
 		output.append(tabulation+"public int deleteV1(Optional<"+ modelFileName + "> " + classNameLowerCase + ") {" +  lineSeparator);
 		output.append(tabulation + tabulation + "return delete(" + classNameLowerCase +".orElseThrow(()->new IcmsException(ErrorFactory.RESOURCE_NOT_FOUND, \"Note is not available\")));"
 				+ lineSeparator +  tabulation + "}" + lineSeparator + lineSeparator);
+		/* Delete Where clause Method */
+		output.append(tabulation + "@Override" + lineSeparator);
+		output.append(tabulation+"public int delete(Identifier identifier, String whereClause) {" +  lineSeparator);
+		output.append(tabulation + tabulation + "return jdbcTemplate.update(environment.getProperty(\"" + 
+				modelFileName + ".delete\"), " + "whereClause);" + lineSeparator + tabulation + "}" + lineSeparator
+				+ lineSeparator);
 		/* RowMapper Class */
 		output.append(tabulation + "RowMapper<" + modelFileName + "> " + classNameLowerCase + "RowMapper = (rs, rowNum) -> {" + lineSeparator + lineSeparator);
 		output.append(tabulation + tabulation + modelFileName + " " + classNameLowerCase + " = new " + modelFileName + "();" + lineSeparator);
