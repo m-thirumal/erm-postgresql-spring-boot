@@ -313,7 +313,7 @@ public class DaoClassRender extends BaseClassRender {
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public int delete(Identifier identifier, String whereClause) {" +  lineSeparator);
 		output.append(tabulation + tabulation + "return jdbcTemplate.update(environment.getProperty(\"" + 
-				modelFileName + ".delete\"), " + "whereClause);" + lineSeparator + tabulation + "}" + lineSeparator
+				modelFileName + ".deleteBy\"), " + "whereClause);" + lineSeparator + tabulation + "}" + lineSeparator
 				+ lineSeparator);
 		/* RowMapper Class */
 		output.append(tabulation + "RowMapper<" + modelFileName + "> " + classNameLowerCase + "RowMapper = (rs, rowNum) -> {" + lineSeparator + lineSeparator);
