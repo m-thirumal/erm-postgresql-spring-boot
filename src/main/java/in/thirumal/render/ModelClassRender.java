@@ -48,6 +48,7 @@ public class ModelClassRender extends BaseClassRender {
 			output.append("import "+path+";"+lineSeparator);
 		}
 		output.append("import lombok.AllArgsConstructor;\r\n" + 
+				"import lombok.EqualsAndHashCode;" + lineSeparator +
 				"import lombok.Builder;\r\n" + 
 				"import lombok.Getter;\r\n" + 
 				"import lombok.NoArgsConstructor;\r\n" + 
@@ -76,7 +77,8 @@ public class ModelClassRender extends BaseClassRender {
      			" */" + lineSeparator);
      	output.append("@Getter@Setter\r\n" + 
      			"@NoArgsConstructor@AllArgsConstructor\r\n" + 
-     			"@ToString@Builder" + lineSeparator);
+     			"@ToString@Builder" + lineSeparator +
+     			"@EqualsAndHashCode" + lineSeparator);
 		output.append("public class " + entity.getName() +(entity.hasParent() ? " extends "+entity.getParentClass() : "")+(interfacesToOuput != null ? interfacesToOuput : "")+" {" + lineSeparator + lineSeparator);
 		output.append(tabulation+"private static final long serialVersionUID = 1L;"+lineSeparator+lineSeparator);
 
@@ -100,7 +102,7 @@ public class ModelClassRender extends BaseClassRender {
 		} else {
 			output.append(lineSeparator);
 		}
-		output.append(tabulation + "//TODO override hashcode & equals method" + lineSeparator);
+		output.append(tabulation + "//TODO hashcode & equals method" + lineSeparator);
 		/*
 		//Default constructor
 		output.append(tabulation+ "//Default constructor" + lineSeparator);	
