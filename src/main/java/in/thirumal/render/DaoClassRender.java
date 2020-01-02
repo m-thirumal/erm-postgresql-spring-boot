@@ -307,13 +307,14 @@ public class DaoClassRender extends BaseClassRender {
 		/* DeleteV1 method */
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public int deleteV1(Optional<"+ modelFileName + "> " + classNameLowerCase + ") {" +  lineSeparator);
-		output.append(tabulation + tabulation + "return delete(" + classNameLowerCase +".orElseThrow(()->new IcmsException(ErrorFactory.RESOURCE_NOT_FOUND, \"Note is not available\")));"
+		output.append(tabulation + tabulation + "return delete(" + classNameLowerCase +".orElseThrow(()->new IcmsException(ErrorFactory.RESOURCE_NOT_FOUND, \"" +
+				modelFileName + " is not available\")));"
 				+ lineSeparator +  tabulation + "}" + lineSeparator + lineSeparator);
 		/* Delete Where clause Method */
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public int delete(Identifier identifier, String whereClause) {" +  lineSeparator);
 		output.append(tabulation + tabulation + "return jdbcTemplate.update(environment.getProperty(\"" + 
-				modelFileName + ".deleteBy\"), " + "whereClause);" + lineSeparator + tabulation + "}" + lineSeparator
+				modelFileName + ".deleteBy\"" + " + " + "whereClause), identifier.getId());" + lineSeparator + tabulation + "}" + lineSeparator
 				+ lineSeparator);
 		/* RowMapper Class */
 		output.append(tabulation + "RowMapper<" + modelFileName + "> " + classNameLowerCase + "RowMapper = (rs, rowNum) -> {" + lineSeparator + lineSeparator);
