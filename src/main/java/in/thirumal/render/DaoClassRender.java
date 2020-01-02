@@ -24,17 +24,17 @@ public class DaoClassRender extends BaseClassRender {
 	}	
 	
 	private void init(){
-		addMandatoryPackage("java.sql.Connection");
+		//addMandatoryPackage("java.sql.Connection");
 		addMandatoryPackage("java.sql.PreparedStatement");
 		//addMandatoryPackage("java.sql.ResultSet");		
-		addMandatoryPackage("java.sql.SQLException");
+		//addMandatoryPackage("java.sql.SQLException");
 		addMandatoryPackage("java.time.LocalDate");
 		addMandatoryPackage("java.util.List");
 		addMandatoryPackage("java.util.Optional");
 		addMandatoryPackage("org.springframework.beans.factory.annotation.Autowired");
 		addMandatoryPackage("org.springframework.core.env.Environment");
 		addMandatoryPackage("org.springframework.jdbc.core.JdbcTemplate");
-		addMandatoryPackage("org.springframework.jdbc.core.PreparedStatementCreator");
+		//addMandatoryPackage("org.springframework.jdbc.core.PreparedStatementCreator");
 		addMandatoryPackage("org.springframework.jdbc.core.RowMapper");
 		addMandatoryPackage("org.springframework.dao.EmptyResultDataAccessException");
 		addMandatoryPackage("org.springframework.jdbc.support.GeneratedKeyHolder");
