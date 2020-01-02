@@ -9,6 +9,9 @@ spring:
     url: ${spring.datasource.jdbc-url}
     username: postgres
     password: thirumal
+  output:
+    ansi:
+      enabled: ALWAYS
 
 name: erm-postgresql-sping-boot
 server:
