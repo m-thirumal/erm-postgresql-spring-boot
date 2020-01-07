@@ -85,6 +85,9 @@ public class ModelClassRender extends BaseClassRender {
 		//Declaring fields
 		output.append(tabulation+"//Declaring fields" + lineSeparator);
 		for (Attribute eachattr : entity.getAlAttr()){
+			if (eachattr.getName().equalsIgnoreCase("rowCreationDate") || eachattr.getName().equalsIgnoreCase("rowcreatedby")) {
+				output.append(tabulation + "@EqualsAndHashCode.Exclude" + lineSeparator);
+			}
 			output.append("	private " + eachattr.getJavaType() + " " + eachattr.getName() + ";" + lineSeparator);
 			if (eachattr.isForeignKey() && eachattr.getRawName().toLowerCase().endsWith("_cd")) {
 				output.append("	private String " + eachattr.getName().substring(0, eachattr.getName().length() - 2) + "Locale" + ";" 
