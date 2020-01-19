@@ -177,11 +177,11 @@ public class DaoClassRender extends BaseClassRender {
 				methodName += "()";
 				preparementSet = DbHelper.createPreparementSet("ps", (psIndex),
 						attribut.getJavaType(), attribut.getSqlType(), classNameLowerCase + "."	+ methodName, true);
-				output.append(tabulation+tabulation+ tabulation + tabulation + preparementSet);
+				output.append(tabulation+tabulation+ tabulation  + preparementSet);
 			}
 
 		}
-		output.append(tabulation+tabulation+ tabulation + tabulation +"return ps;" + lineSeparator);
+		output.append(tabulation+tabulation+ tabulation +"return ps;" + lineSeparator);
 		//output.append(tabulation+tabulation+ tabulation + "}" + lineSeparator);
 		output.append(tabulation+tabulation+  "}, holder);" + lineSeparator);
 		output.append(tabulation + tabulation + "return holder.getKey().longValue();" + lineSeparator);

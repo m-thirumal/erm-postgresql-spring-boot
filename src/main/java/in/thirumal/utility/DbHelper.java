@@ -324,9 +324,7 @@ public final class DbHelper {
 			return simpleNamesCanonicalNames.get(simpleName);
 		}
 		throw new Exception("Impossible to find the canonical name from the simpleName: "+simpleName);
-	}
-	
-	
+	}	
 	
 	public static final String createPreparementSet(String ps, int index, String javaType, String sqlType,
 			String objectSourceAsName, boolean canBeNull) {
@@ -355,11 +353,11 @@ public final class DbHelper {
 			if (canBeNull) {
 				String result_tmp = "if(" + value
 						+ " == null) {\r\n";
-				result_tmp += "\t\t\t\t\t" + ps + ".setObject(" + index
+				result_tmp += "\t\t\t\t" + ps + ".setObject(" + index
 						+ ", null);\r\n";
-				result_tmp += "\t\t\t\t} else { \r\n";
-				result_tmp += "\t\t\t\t\t" + result + ";\r\n";
-				result_tmp += "\t\t\t\t}\r\n";
+				result_tmp += "\t\t\t} else { \r\n";
+				result_tmp += "\t\t\t\t" + result + ";\r\n";
+				result_tmp += "\t\t\t}\r\n";
 				result = result_tmp;
 			} else {
 				result += ";";
