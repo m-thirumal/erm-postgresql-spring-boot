@@ -27,6 +27,7 @@ public final class DbHelper {
 		javaTypesResultSet.put("Byte", "%s.getByte(%s)");
 		javaTypesResultSet.put("Integer", "%s.getInt(%s)");
 		javaTypesResultSet.put("Long", "%s.getLong(%s)");
+		javaTypesResultSet.put("bigserial", "%s.getLong(%s)");
 		javaTypesResultSet.put("Float", "%s.getFloat(%s)");
 		javaTypesResultSet.put("Double", "%s.getDouble(%s)");
 		javaTypesResultSet.put("byte[]", "%s.getBytes(%s)");
@@ -65,6 +66,9 @@ public final class DbHelper {
 		javaTypesResultSet.put("litigation_party_type", "%s.getString(%s)");
 		javaTypesResultSet.put("news_edition", "%s.getString(%s)");
 		javaTypesResultSet.put("mode_of_communication", "%s.getString(%s)");
+		javaTypesResultSet.put("liquidation_reason", "%s.getString(%s)");
+		javaTypesResultSet.put("withdrawal_reason", "%s.getString(%s)");
+		//
 	}
 	
 	private static void mapJavaTypesPrepareStatementSet(){
@@ -79,6 +83,7 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("Byte", "%s.setByte(%s, %s)");
 		javaTypesPreparedStatementSet.put("Integer", "%s.setInt(%s, %s)");
 		javaTypesPreparedStatementSet.put("Long", "%s.setLong(%s, %s)");
+		javaTypesPreparedStatementSet.put("bigserial", "%s.setLong(%s, %s)");
 		javaTypesPreparedStatementSet.put("Float", "%s.setFloat(%s, %s)");
 		javaTypesPreparedStatementSet
 				.put("Double", "%s.setDouble(%s, %s)");
@@ -118,6 +123,8 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("litigation_party_type", "%s.getString(%s)");
 		javaTypesPreparedStatementSet.put("news_edition", "%s.getString(%s)");
 		javaTypesPreparedStatementSet.put("mode_of_communication", "%s.getString(%s)");
+		javaTypesPreparedStatementSet.put("liquidation_reason", "%s.getString(%s)");
+		javaTypesPreparedStatementSet.put("withdrawal_reason", "%s.getString(%s)");
 	}
 	
 	private static void	mapSQLTypesJavaTypes(){
@@ -149,6 +156,7 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("int", "Integer");
 		sqlTypesJavaTypes.put("integer", "Integer");
 		sqlTypesJavaTypes.put("bigint", "Long");
+		sqlTypesJavaTypes.put("bigserial", "Long");
 		sqlTypesJavaTypes.put("real", "Float");
 		sqlTypesJavaTypes.put("double", "Double");
 		sqlTypesJavaTypes.put("money", "BigDecimal");
@@ -194,6 +202,7 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("bool", "Boolean");
 		sqlTypesJavaTypes.put("int2", "Integer");
 		sqlTypesJavaTypes.put("int4", "Integer");
+		sqlTypesJavaTypes.put("int8", "Integer");
 		sqlTypesJavaTypes.put("bpchar", "String");
 		sqlTypesJavaTypes.put("chkpass", "String");
 		sqlTypesJavaTypes.put("inet", "String");
@@ -204,6 +213,8 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("interval", "PGInterval");
 		sqlTypesJavaTypes.put("point", "PGpoint");
 		sqlTypesJavaTypes.put("daterange", "DateRange");
+		//tsVector
+		sqlTypesJavaTypes.put("tsvector", "String");
 		//ENUM
 		sqlTypesJavaTypes.put("nature_of_money", "String");
 		sqlTypesJavaTypes.put("nature_of_debt", "String");
@@ -218,6 +229,8 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("litigation_party_type", "String");
 		sqlTypesJavaTypes.put("news_edition", "String");
 		sqlTypesJavaTypes.put("mode_of_communication", "String");
+		sqlTypesJavaTypes.put("liquidation_reason", "String");
+		sqlTypesJavaTypes.put("withdrawal_reason", "String");
 	}
 	
 	private static void mapSimpleNameCanonicalName(){
@@ -260,6 +273,8 @@ public final class DbHelper {
 		simpleNamesCanonicalNames.put("litigation_party_type", "String");
 		simpleNamesCanonicalNames.put("news_edition", "String");
 		simpleNamesCanonicalNames.put("mode_of_communication", "String");
+		simpleNamesCanonicalNames.put("liquidation_reason", "String");
+		simpleNamesCanonicalNames.put("withdrawal_reason", "String");
 	}
 	
 	
