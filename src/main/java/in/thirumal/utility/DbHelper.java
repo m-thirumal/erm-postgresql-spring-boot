@@ -353,26 +353,26 @@ public final class DbHelper {
 		boolean mappingExists = psSet != null && !ps.isEmpty();
 		if (mappingExists) {
 			String value = objectSourceAsName;
-			if(sqlType != null) {
+			/*if(sqlType != null) {
 				if(sqlType.equalsIgnoreCase("time") || sqlType.equalsIgnoreCase("smalldatetime") || 
 						   sqlType.equalsIgnoreCase("datetime") || sqlType.equalsIgnoreCase("datetime2") || 
 						   sqlType.equalsIgnoreCase("timestamp") || sqlType.equalsIgnoreCase("datetimeoffset")) {
 							objectSourceAsName = "new java.sql.Timestamp("+objectSourceAsName+".getTime())";							
 							javaType = "Timestamp";
 							
-				} /*else if(sqlType.equalsIgnoreCase("date")) {					
+				} else if(sqlType.equalsIgnoreCase("date")) {					
 					objectSourceAsName = "new java.sql.Date("+objectSourceAsName+".getTime())";
-				}*/
-			}
+				}
+			}*/
 			result = String.format(psSet, ps, index, objectSourceAsName);
 			if (canBeNull) {
 				String result_tmp = "if(" + value
 						+ " == null) {\r\n";
-				result_tmp += "\t\t\t\t" + ps + ".setObject(" + index
+				result_tmp += "\t\t\t" + ps + ".setObject(" + index
 						+ ", null);\r\n";
-				result_tmp += "\t\t\t} else { \r\n";
-				result_tmp += "\t\t\t\t" + result + ";\r\n";
-				result_tmp += "\t\t\t}\r\n";
+				result_tmp += "\t\t} else { \r\n";
+				result_tmp += "\t\t\t" + result + ";\r\n";
+				result_tmp += "\t\t}\r\n";
 				result = result_tmp;
 			} else {
 				result += ";";

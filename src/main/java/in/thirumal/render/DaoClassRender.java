@@ -1,5 +1,6 @@
 package in.thirumal.render;
 
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +28,13 @@ public class DaoClassRender extends BaseClassRender {
 		//addMandatoryPackage("java.sql.Connection");
 		addMandatoryPackage("java.sql.PreparedStatement");
 		//addMandatoryPackage("java.sql.ResultSet");		
-		//addMandatoryPackage("java.sql.SQLException");
+		addMandatoryPackage("java.sql.SQLException");
 		addMandatoryPackage("java.time.LocalDate");
 		addMandatoryPackage("java.util.List");
 		addMandatoryPackage("java.util.Optional");
 		addMandatoryPackage("org.springframework.beans.factory.annotation.Autowired");
 		addMandatoryPackage("org.springframework.core.env.Environment");
+		addMandatoryPackage("org.springframework.jdbc.core.BatchPreparedStatementSetter");
 		addMandatoryPackage("org.springframework.jdbc.core.JdbcTemplate");
 		//addMandatoryPackage("org.springframework.jdbc.core.PreparedStatementCreator");
 		addMandatoryPackage("org.springframework.jdbc.core.RowMapper");
@@ -117,6 +119,11 @@ public class DaoClassRender extends BaseClassRender {
 				+ (getEntity().hasParent() ? " extends " + getEntity().getParentClass() : "")
 				+ (interfacesToOuput != null ? interfacesToOuput : "") + " {"
 				+ lineSeparator + lineSeparator);
+		
+		output.append(tabulation + "private static final String CREATE    = \"" + modelFileName + ".create\";" + lineSeparator);
+		output.append(tabulation + "private static final String GET_BY    = \"" + modelFileName + ".getBy\";" + lineSeparator);
+		output.append(tabulation + "private static final String LIST_BY   = \"" + modelFileName + ".listBy\";"+ lineSeparator);
+		output.append(tabulation + "private static final String DELETE_BY = \"" + modelFileName + ".deleteBy\";"+ lineSeparator+ lineSeparator);
 		output.append(tabulation + "private final JdbcTemplate jdbcTemplate;" + lineSeparator);
 		output.append(tabulation + "private Environment environment;" + lineSeparator + lineSeparator + tabulation + "@Autowired" +
 				lineSeparator);
@@ -149,17 +156,19 @@ public class DaoClassRender extends BaseClassRender {
 		output.append(tabulation+"@Override" + lineSeparator);
 		output.append(tabulation+"public Long " + "insert(" + modelFileName  + " " + classNameLowerCase + ", Identifier identifier) {"+ lineSeparator);
 		output.append(tabulation + tabulation + "KeyHolder holder = new GeneratedKeyHolder();" + lineSeparator +
-				//tabulation + tabulation + "jdbcTemplate.update(new PreparedStatementCreator()  {" + lineSeparator +
-				//tabulation + tabulation + tabulation + "@Override" + lineSeparator +
-				//tabulation + tabulation + tabulation + "public PreparedStatement createPreparedStatement(Connection con) throws SQLException {" + lineSeparator +
-				tabulation + tabulation + "jdbcTemplate.update(con -> {" + lineSeparator +
-				tabulation + tabulation + tabulation + "PreparedStatement ps = con.prepareStatement(environment.getProperty(\"" + 
-				modelFileName + ".create\"), "); 
+				tabulation + tabulation + "jdbcTemplate.update(con ->" + lineSeparator);
+		output.append(tabulation + tabulation +tabulation+"setPreparedStatement(" + classNameLowerCase + ", con.prepareStatement(environment.getProperty(CREATE)," + lineSeparator);
+		output.append(tabulation + tabulation +tabulation+ tabulation +tabulation);
 		if (pkSize == 2) {
-			output.append("Statement.RETURN_GENERATED_KEYS);;" + lineSeparator);
+			output.append("Statement.RETURN_GENERATED_KEYS))");
 		} else {
-			output.append("new String[] { \"" + pkInRaw + "\" });" + lineSeparator);
+			output.append("new String[] { \"" + pkInRaw + "\" }))");
 		}
+		output.append(", holder);" + lineSeparator);
+		output.append(tabulation + tabulation + "return holder.getKey().longValue();" + lineSeparator);
+		output.append(tabulation + "}" + lineSeparator + lineSeparator );
+		/*Set PreparedStatement*/	
+		output.append(tabulation+"public PreparedStatement setPreparedStatement(" + modelFileName  + " " + classNameLowerCase +", PreparedStatement ps) throws SQLException {" + lineSeparator);
 		int psIndex = 0;
 		for (int i = 0, attributesLenght = attributes.size(); i < attributesLenght; i++) {
 			attribut = attributes.get(i);
@@ -168,25 +177,37 @@ public class DaoClassRender extends BaseClassRender {
 			}
 			if (pkSize == 2 || !attribut.isPrimaryKey() || !attribut.isAutoincrement()) {
 				psIndex++;
-				if (!attribut.getJavaType().equalsIgnoreCase("Boolean")) {
+			//	if (!attribut.getJavaType().equalsIgnoreCase("Boolean")) {
 					methodName = StringHelper.saniziteForClassName(attribut.getName());
 					methodName = "get" + methodName;
-				} else {
+				/*} else {
 					methodName = StringHelper.getMethodNameForBoolean(StringHelper.sanitizeForAttributName(attribut.getName()));
-				}
+				}*/
 				methodName += "()";
 				preparementSet = DbHelper.createPreparementSet("ps", (psIndex),
 						attribut.getJavaType(), attribut.getSqlType(), classNameLowerCase + "."	+ methodName, true);
-				output.append(tabulation+tabulation+ tabulation  + preparementSet);
+				output.append(tabulation+tabulation  + preparementSet);
 			}
 
 		}
-		output.append(tabulation+tabulation+ tabulation +"return ps;" + lineSeparator);
-		//output.append(tabulation+tabulation+ tabulation + "}" + lineSeparator);
-		output.append(tabulation+tabulation+  "}, holder);" + lineSeparator);
-		output.append(tabulation + tabulation + "return holder.getKey().longValue();" + lineSeparator);
-		output.append(tabulation + "}" + lineSeparator + lineSeparator );
-			
+		output.append(tabulation+tabulation +"return ps;" + lineSeparator);
+		output.append(tabulation+"}" + lineSeparator + lineSeparator);
+		/*Bulk/Batch Insert*/
+		output.append(tabulation + "/*Bulk/Batch Insert*/" + lineSeparator);
+		String modelList = classNameLowerCase + "List";
+		output.append(tabulation + "public void insertBatch(List<" + modelFileName + "> " + modelList + ") {" + lineSeparator);
+		output.append(tabulation +tabulation +"jdbcTemplate.batchUpdate(environment.getProperty(CREATE), new BatchPreparedStatementSetter() {"+ lineSeparator);
+		output.append(tabulation + tabulation + tabulation + "@Override\r\n" + 
+				"		    public void setValues(PreparedStatement ps, int i) throws SQLException {" + lineSeparator);
+		output.append(tabulation + tabulation + tabulation +tabulation + modelFileName + " " + classNameLowerCase + " = " + modelList +".get(i);" + lineSeparator);
+		output.append(tabulation + tabulation + tabulation +tabulation + "setPreparedStatement(" + classNameLowerCase + ", ps);" + lineSeparator);
+		output.append(tabulation + tabulation + tabulation + "}" + lineSeparator);
+		output.append(tabulation + tabulation + tabulation +"@Override\r\n" + 
+				"		    public int getBatchSize() {\r\n" + 
+				"		        return " + modelList + ".size();" + lineSeparator);
+		output.append(tabulation + tabulation + tabulation + "}" + lineSeparator);
+		output.append(tabulation + tabulation + "});" + lineSeparator);
+		output.append(tabulation + "}" + lineSeparator + lineSeparator);
 		/* Get Method */
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public "+ modelFileName + " get(Identifier identifier) {" +  lineSeparator);
@@ -215,8 +236,7 @@ public class DaoClassRender extends BaseClassRender {
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public Optional<"+ modelFileName + "> getV1(Identifier identifier, String whereClause) {" +  lineSeparator);
 		output.append(tabulation + tabulation + "try {" + lineSeparator);
-		output.append(tabulation + tabulation + tabulation + "return Optional.of(jdbcTemplate.queryForObject(environment.getProperty(\"" + modelFileName + ".getBy\" + whereClause" +
-				"), new Object[] { "
+		output.append(tabulation + tabulation + tabulation + "return Optional.of(jdbcTemplate.queryForObject(environment.getProperty(GET_BY + whereClause), new Object[] { "
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getLocaleCd()," 
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getId()"
 				+ lineSeparator + tabulation + tabulation + tabulation + "}, " + classNameLowerCase + "RowMapper));" + lineSeparator );
@@ -240,8 +260,7 @@ public class DaoClassRender extends BaseClassRender {
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public List<"+ modelFileName + "> list(Identifier identifier, String whereClause) {" +  lineSeparator);
 		output.append(tabulation + tabulation + "try {" + lineSeparator);
-		output.append(tabulation + tabulation + tabulation + "return jdbcTemplate.query(environment.getProperty(\"" + modelFileName + ".listBy\" + whereClause" +
-				"), new Object[] { "
+		output.append(tabulation + tabulation + tabulation + "return jdbcTemplate.query(environment.getProperty(LIST_BY + whereClause), new Object[] { "
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getLocaleCd()," 
 				+ lineSeparator + tabulation + tabulation + tabulation + tabulation + "identifier.getId()"
 				+ lineSeparator + tabulation + tabulation + tabulation + " }, " + classNameLowerCase + "RowMapper);" + lineSeparator );
@@ -264,12 +283,12 @@ public class DaoClassRender extends BaseClassRender {
 				continue;
 			}
 			if (!attribut.isPrimaryKey() || !attribut.isAutoincrement()) {
-				if (!attribut.getJavaType().equalsIgnoreCase("Boolean")) {
+			//	if (!attribut.getJavaType().equalsIgnoreCase("Boolean")) {
 					methodName = StringHelper.saniziteForClassName(attribut.getName());
 					methodName = "get" + methodName;
-				} else {
+			/*	} else {
 					methodName = StringHelper.getMethodNameForBoolean(StringHelper.sanitizeForAttributName(attribut.getName()));
-				}
+				}*/
 				methodName += "()";
 				if ((i + 1) < attributesLenght) {
 					output.append(tabulation + tabulation + tabulation + classNameLowerCase + "." + methodName + "," + lineSeparator);
@@ -313,8 +332,7 @@ public class DaoClassRender extends BaseClassRender {
 		/* Delete Where clause Method */
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public int delete(Identifier identifier, String whereClause) {" +  lineSeparator);
-		output.append(tabulation + tabulation + "return jdbcTemplate.update(environment.getProperty(\"" + 
-				modelFileName + ".deleteBy\"" + " + " + "whereClause), identifier.getId());" + lineSeparator + tabulation + "}" + lineSeparator
+		output.append(tabulation + tabulation + "return jdbcTemplate.update(environment.getProperty(DELETE_BY + whereClause), identifier.getId());" + lineSeparator + tabulation + "}" + lineSeparator
 				+ lineSeparator);
 		/* RowMapper Class */
 		output.append(tabulation + "RowMapper<" + modelFileName + "> " + classNameLowerCase + "RowMapper = (rs, rowNum) -> {" + lineSeparator + lineSeparator);
@@ -339,21 +357,21 @@ public class DaoClassRender extends BaseClassRender {
 			output.append(StringHelper.lineSeparator);
 			String rsCreated = DbHelper.createResulSet("rs", attribut.getJavaType(), attribut.getSqlType(),
 					attribut.getRawName());
-			if (!attribut.getJavaType().equalsIgnoreCase("Boolean")) {
+			//if (!attribut.getJavaType().equalsIgnoreCase("Boolean")) {
 				methodName = StringHelper.saniziteForClassName(attribut
 						.getName());
 				methodName = "set" + methodName;
-			} else {
+			/*} else {
 				methodName = "set" + StringHelper.getMethodNameForBoolean(StringHelper.sanitizeForAttributName(attribut.getName()));
-			}
+			}*/
 			String setObj = classNameLowerCase + "." + methodName + "("	+ rsCreated + ")";
 			output.append(tabulation + tabulation + setObj + ";" + lineSeparator);
 			if (attribut.isForeignKey() && attribut.getRawName().toLowerCase().endsWith("_cd")) {
 				output.append(StringHelper.lineSeparator);
 				String rawLocale = attribut.getRawName().substring(0, attribut.getRawName().length() - 2) + "locale";
 				methodName = methodName.substring(0, methodName.length() - 2) + "Locale";
-				String inner =  "rs.getObject(\"" +	rawLocale + "\") != null ? rs.getString(\"" + rawLocale + "\") : null;";
-				output.append(tabulation + tabulation + classNameLowerCase + "." + methodName + "(" + inner +  ")" + lineSeparator);
+				String inner =  "rs.getObject(\"" +	rawLocale + "\") != null ? rs.getString(\"" + rawLocale + "\") : null";
+				output.append(tabulation + tabulation + classNameLowerCase + "." + methodName + "(" + inner +  ");" + lineSeparator);
 			}
 		}
 		output.append(lineSeparator);
