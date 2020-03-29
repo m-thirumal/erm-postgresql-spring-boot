@@ -51,6 +51,7 @@ public final class DbHelper {
 		javaTypesResultSet.put("LocalDate", "%s.getObject(%s, LocalDate.class)");
 		javaTypesResultSet.put("PGpoint", "%s.getObject(%s)");
 		javaTypesResultSet.put("DateRange", "%s.getObject(%s)");
+		javaTypesResultSet.put("bigint", "%s.getObject(%s)");
 		
 		//Enum
 		javaTypesResultSet.put("nature_of_money", "%s.getString(%s)");
@@ -109,6 +110,7 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("LocalDate", "%s.setObject(%s, %s)");
 		javaTypesPreparedStatementSet.put("PGpoint", "%s.setObject(%s, %s)");
 		javaTypesPreparedStatementSet.put("DateRange", "%s.setObject(%s, %s)");
+		javaTypesPreparedStatementSet.put("bigint", "%s.setObject(%s, %s)");
 		//Enum
 		javaTypesPreparedStatementSet.put("nature_of_money", "%s.setString(%s, %s)");
 		javaTypesPreparedStatementSet.put("nature_of_debt", "%s.setString(%s, %s)");
@@ -195,7 +197,9 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("datetime2", "LocalDate");
 		sqlTypesJavaTypes.put("timestamp", "LocalDate");
 		sqlTypesJavaTypes.put("timestamptz", "OffsetDateTime");
+		sqlTypesJavaTypes.put("timestamp with time zone", "OffsetDateTime");
 		sqlTypesJavaTypes.put("datetimeoffset", "LocalDate");
+		sqlTypesJavaTypes.put("timestamp without time zone", "LocalDate");
 		
 		// PostgreSQL 
 		sqlTypesJavaTypes.put("serial", "Long");
@@ -387,7 +391,7 @@ public final class DbHelper {
 		try {
 			rsGet = javaTypeToResultSetGet(javaType);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			System.out.println(sqlType + ", " + javaType);
 			e.printStackTrace();
 		}
 		boolean mappingExists = rsGet != null && !rsGet.isEmpty();
