@@ -51,6 +51,7 @@ public final class DbHelper {
 		javaTypesResultSet.put("LocalDate", "%s.getObject(%s, LocalDate.class)");
 		javaTypesResultSet.put("PGpoint", "%s.getObject(%s)");
 		javaTypesResultSet.put("DateRange", "%s.getObject(%s)");
+		javaTypesResultSet.put("DateTimeRange", "%s.getObject(%s)");
 		javaTypesResultSet.put("bigint", "%s.getObject(%s)");
 		
 		//Enum
@@ -111,6 +112,7 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("LocalDate", "%s.setObject(%s, %s)");
 		javaTypesPreparedStatementSet.put("PGpoint", "%s.setObject(%s, %s)");
 		javaTypesPreparedStatementSet.put("DateRange", "%s.setObject(%s, %s)");
+		javaTypesPreparedStatementSet.put("DateTimeRange", "%s.setObject(%s, %s)");
 		javaTypesPreparedStatementSet.put("bigint", "%s.setObject(%s, %s)");
 		//Enum
 		javaTypesPreparedStatementSet.put("nature_of_money", "%s.setString(%s, %s)");
@@ -265,6 +267,7 @@ public final class DbHelper {
 		simpleNamesCanonicalNames.put("PGpoint", "org.postgresql.geometric.PGpoint");
 		simpleNamesCanonicalNames.put("LocalDate", "java.time.LocalDate");
 		simpleNamesCanonicalNames.put("DateRange", "com.enkindle.persistence.code.shared.DateRange");
+		simpleNamesCanonicalNames.put("tsrange", "com.enkindle.persistence.code.shared.DateTimeRange");
 		
 		//Enum
 		simpleNamesCanonicalNames.put("nature_of_money", "java.lang.String");
