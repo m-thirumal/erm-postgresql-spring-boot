@@ -69,6 +69,7 @@ public final class DbHelper {
 		javaTypesResultSet.put("mode_of_communication", "%s.getString(%s)");
 		javaTypesResultSet.put("liquidation_reason", "%s.getString(%s)");
 		javaTypesResultSet.put("withdrawal_reason", "%s.getString(%s)");
+		javaTypesResultSet.put("icms_service", "%s.getString(%s)");
 		//
 	}
 	
@@ -127,6 +128,7 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("mode_of_communication", "%s.getString(%s)");
 		javaTypesPreparedStatementSet.put("liquidation_reason", "%s.getString(%s)");
 		javaTypesPreparedStatementSet.put("withdrawal_reason", "%s.getString(%s)");
+		javaTypesPreparedStatementSet.put("icms_service", "%s.getString(%s)");
 	}
 	
 	private static void	mapSQLTypesJavaTypes(){
@@ -235,6 +237,7 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("mode_of_communication", "String");
 		sqlTypesJavaTypes.put("liquidation_reason", "String");
 		sqlTypesJavaTypes.put("withdrawal_reason", "String");
+		sqlTypesJavaTypes.put("icms_service", "String");
 	}
 	
 	private static void mapSimpleNameCanonicalName(){
@@ -279,6 +282,7 @@ public final class DbHelper {
 		simpleNamesCanonicalNames.put("mode_of_communication", "String");
 		simpleNamesCanonicalNames.put("liquidation_reason", "String");
 		simpleNamesCanonicalNames.put("withdrawal_reason", "String");
+		simpleNamesCanonicalNames.put("icms_service", "String");
 	}
 	
 	
