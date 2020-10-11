@@ -2,7 +2,7 @@
 ERM for postgreSQL
 
 #To use swagger UI
-<a href ="http://localhost:21991/swagger-ui.html">Swagger-UI</a>
+<a href ="http://localhost:21991/swagger-ui/index.html">Swagger-UI</a>
 
 #Configuration files
 1. src/main/resources/application.yml
