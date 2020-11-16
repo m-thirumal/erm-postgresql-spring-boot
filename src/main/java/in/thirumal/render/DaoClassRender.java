@@ -44,7 +44,7 @@ public class DaoClassRender extends BaseClassRender {
 		addMandatoryPackage("org.springframework.stereotype.Repository");
 		addMandatoryPackage("com.enkindle.exception.ErrorFactory");
 		addMandatoryPackage("com.enkindle.exception.IcmsException");
-		addMandatoryPackage("com.enkindle.persistence.GenericDao");
+		addMandatoryPackage("com.enkindle.persistence.GenericDaoImp");
 	}
 	
 	public void addMandatoryPackage(String classCanonicalName){
@@ -124,14 +124,14 @@ public class DaoClassRender extends BaseClassRender {
 		output.append(tabulation + "private static final String GET_BY    = \"" + modelFileName + ".getBy\";" + lineSeparator);
 		output.append(tabulation + "private static final String LIST_BY   = \"" + modelFileName + ".listBy\";"+ lineSeparator);
 		output.append(tabulation + "private static final String DELETE_BY = \"" + modelFileName + ".deleteBy\";"+ lineSeparator+ lineSeparator);
-		output.append(tabulation + "private final JdbcTemplate jdbcTemplate;" + lineSeparator);
-		output.append(tabulation + "private Environment environment;" + lineSeparator + lineSeparator + tabulation + "@Autowired" +
-				lineSeparator);
+		//output.append(tabulation + "private final JdbcTemplate jdbcTemplate;" + lineSeparator);
+		//output.append(tabulation + "private Environment environment;" + lineSeparator + lineSeparator + tabulation + "@Autowired" +
+		//		lineSeparator);
 		// Constructor
-		output.append(tabulation+"public " + className + "(JdbcTemplate jdbcTemplate, Environment environment) {" + lineSeparator);
-		output.append(tabulation+tabulation+"this.jdbcTemplate = jdbcTemplate;" + lineSeparator);
-		output.append(tabulation+tabulation+"this.environment = environment;" + lineSeparator);
-		output.append(tabulation+"}" + lineSeparator + lineSeparator);
+		//output.append(tabulation+"public " + className + "(JdbcTemplate jdbcTemplate, Environment environment) {" + lineSeparator);
+		//output.append(tabulation+tabulation+"this.jdbcTemplate = jdbcTemplate;" + lineSeparator);
+		//output.append(tabulation+tabulation+"this.environment = environment;" + lineSeparator);
+		//output.append(tabulation+"}" + lineSeparator + lineSeparator);
 		
 		/* Create */
 		output.append(tabulation+"@Override" + lineSeparator);
