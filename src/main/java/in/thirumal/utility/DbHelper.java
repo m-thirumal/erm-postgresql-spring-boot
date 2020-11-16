@@ -53,6 +53,8 @@ public final class DbHelper {
 		javaTypesResultSet.put("DateRange", "%s.getObject(%s)");
 		javaTypesResultSet.put("DateTimeRange", "%s.getObject(%s)");
 		javaTypesResultSet.put("bigint", "%s.getObject(%s)");
+		javaTypesResultSet.put("tstzrange", "%s.getObject(%s)");
+		javaTypesResultSet.put("_int8", "%s.getInt(%s)");
 		
 		//Enum
 		javaTypesResultSet.put("nature_of_money", "%s.getString(%s)");
@@ -71,6 +73,12 @@ public final class DbHelper {
 		javaTypesResultSet.put("liquidation_reason", "%s.getString(%s)");
 		javaTypesResultSet.put("withdrawal_reason", "%s.getString(%s)");
 		javaTypesResultSet.put("icms_service", "%s.getString(%s)");
+		javaTypesResultSet.put("units", "%s.getString(%s)");
+		javaTypesResultSet.put("cirp_stage", "%s.getString(%s)");
+		javaTypesResultSet.put("cirp_exclusion_reason", "%s.getString(%s)");
+		javaTypesResultSet.put("period", "%s.getString(%s)");
+		javaTypesResultSet.put("json", "%s.getString(%s)");
+		javaTypesResultSet.put("_icms_service", "%s.getString(%s)");
 		//
 	}
 	
@@ -114,6 +122,8 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("DateRange", "%s.setObject(%s, %s)");
 		javaTypesPreparedStatementSet.put("DateTimeRange", "%s.setObject(%s, %s)");
 		javaTypesPreparedStatementSet.put("bigint", "%s.setObject(%s, %s)");
+		javaTypesPreparedStatementSet.put("tstzrange", "%s.setObject(%s, %s)");
+		javaTypesPreparedStatementSet.put("_int8", "%s.setObject(%s, %s)");
 		//Enum
 		javaTypesPreparedStatementSet.put("nature_of_money", "%s.setString(%s, %s)");
 		javaTypesPreparedStatementSet.put("nature_of_debt", "%s.setString(%s, %s)");
@@ -130,7 +140,13 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("mode_of_communication", "%s.getString(%s)");
 		javaTypesPreparedStatementSet.put("liquidation_reason", "%s.getString(%s)");
 		javaTypesPreparedStatementSet.put("withdrawal_reason", "%s.getString(%s)");
-		javaTypesPreparedStatementSet.put("icms_service", "%s.getString(%s)");
+		javaTypesPreparedStatementSet.put("icms_service", "%s.getString(%s)");		
+		javaTypesPreparedStatementSet.put("units", "%s.getString(%s)");
+		javaTypesPreparedStatementSet.put("cirp_stage", "%s.getString(%s)");
+		javaTypesPreparedStatementSet.put("cirp_exclusion_reason", "%s.getString(%s)");
+		javaTypesPreparedStatementSet.put("period", "%s.getString(%s)");
+		javaTypesPreparedStatementSet.put("json", "%s.getString(%s)");
+		javaTypesPreparedStatementSet.put("_icms_service", "%s.getString(%s)");
 	}
 	
 	private static void	mapSQLTypesJavaTypes(){
@@ -173,6 +189,7 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("unsigned int", "Integer");
 		sqlTypesJavaTypes.put("unsigned bigint", "BigDecimal");
 		sqlTypesJavaTypes.put("_int4", "Integer");
+		sqlTypesJavaTypes.put("_int8", "Integer");
 		
 		sqlTypesJavaTypes.put("binary", "byte[]");
 		sqlTypesJavaTypes.put("varbinary", "byte[]");
@@ -204,6 +221,7 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("timestamp with time zone", "OffsetDateTime");
 		sqlTypesJavaTypes.put("datetimeoffset", "LocalDate");
 		sqlTypesJavaTypes.put("timestamp without time zone", "LocalDate");
+		sqlTypesJavaTypes.put("tstzrange", "LocalDate");
 		
 		// PostgreSQL 
 		sqlTypesJavaTypes.put("serial", "Long");
@@ -240,6 +258,12 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("liquidation_reason", "String");
 		sqlTypesJavaTypes.put("withdrawal_reason", "String");
 		sqlTypesJavaTypes.put("icms_service", "String");
+		sqlTypesJavaTypes.put("units", "String");
+		sqlTypesJavaTypes.put("cirp_stage", "String");
+		sqlTypesJavaTypes.put("cirp_exclusion_reason", "String");
+		sqlTypesJavaTypes.put("period", "String");
+		sqlTypesJavaTypes.put("json", "String");
+		sqlTypesJavaTypes.put("_icms_service", "String");
 	}
 	
 	private static void mapSimpleNameCanonicalName(){

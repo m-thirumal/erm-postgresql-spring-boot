@@ -98,7 +98,7 @@ public class DaoClassRender extends BaseClassRender {
 		}
 		output.append(lineSeparator);
 		if (getEntity().hasInterface()) {
-			interfacesToOuput = " implements ";
+			interfacesToOuput = " extends ";
 			String interfaceToOuput = null;
 			ArrayList<String> interFaces = getEntity().getInterfaces();
 			for (int i = 0, interfaceCanonicalNamesLenght = interFaces.size(); i < interfaceCanonicalNamesLenght; i++) {
@@ -134,8 +134,8 @@ public class DaoClassRender extends BaseClassRender {
 		//output.append(tabulation+"}" + lineSeparator + lineSeparator);
 		
 		/* Create */
-		output.append(tabulation+"@Override" + lineSeparator);
-		output.append(tabulation+"public " + modelFileName + " create(" + modelFileName  + " " + classNameLowerCase + ", Identifier identifier) { "+ lineSeparator);
+	//	output.append(tabulation+"@Override" + lineSeparator);
+	//	output.append(tabulation+"public " + modelFileName + " create(" + modelFileName  + " " + classNameLowerCase + ", Identifier identifier) { "+ lineSeparator);
 		/*if (pkSize == 2) {
 			output.append(tabulation + tabulation + "return get(Integer.parseInt(holder.getKeys().get(\"" + pkAttributes.get(0) +
 				"\").toString()), Integer.parseInt(holder.getKeys().get(\""+ pkAttributes.get(1) + "\").toString()));" +  lineSeparator);
@@ -145,8 +145,8 @@ public class DaoClassRender extends BaseClassRender {
 				//		".getck\"), new Object[] { " + pkAttributes.get(0) + ", " + pkAttributes.get(1) + 
 					//	" }, new " + modelFileName + "RowMapper());" + lineSeparator + tabulation + "}" + lineSeparator + lineSeparator);
 		} else {*/
-		output.append(tabulation + tabulation + "return createV1(" + classNameLowerCase + ", identifier).orElse(null);" + lineSeparator);
-		output.append(tabulation + "}" + lineSeparator + lineSeparator );
+	//	output.append(tabulation + tabulation + "return createV1(" + classNameLowerCase + ", identifier).orElse(null);" + lineSeparator);
+	//	output.append(tabulation + "}" + lineSeparator + lineSeparator );
 		/* Create V1*/
 		output.append(tabulation+"@Override" + lineSeparator);
 		output.append(tabulation+"public Optional<" + modelFileName + "> createV1(" + modelFileName  + " " + classNameLowerCase + ", Identifier identifier) { "+ lineSeparator);
@@ -273,6 +273,11 @@ public class DaoClassRender extends BaseClassRender {
 		output.append(tabulation+"public "+ modelFileName + " update(" + modelFileName + " " + classNameLowerCase + ", Identifier identifier) {" +  lineSeparator);
 		output.append(tabulation + tabulation + "return updateV1(" + classNameLowerCase +  ", identifier).orElse(null);" + lineSeparator 
 				+ tabulation + "}" + lineSeparator + lineSeparator);
+		/* HOT Update Method */
+		output.append(tabulation + "@Override" + lineSeparator);
+		output.append(tabulation+"public Optional<"+ modelFileName + "> hotUpdate(" + modelFileName + " " + classNameLowerCase + ", Identifier identifier, String whereClause) {" +  lineSeparator);
+		output.append(tabulation + tabulation + "return Optional.empty();"+lineSeparator);
+		output.append(tabulation+"}"+lineSeparator+lineSeparator);
 		/* updateV1 method*/
 		output.append(tabulation + "@Override" + lineSeparator);
 		output.append(tabulation+"public Optional<"+ modelFileName + "> updateV1(" + modelFileName + " " + classNameLowerCase + ", Identifier identifier) {" +  lineSeparator);

@@ -39,13 +39,15 @@ public class GeneratorService implements GenericService {
 	
 	@Override
 	public boolean generate(String databaseName, String schemaName) {
+		LOGGER.info("---Start---");
 		List<Entity> entities = genericDao.list(databaseName, schemaName);
-		LOGGER.info("Totoal size: " + entities.size());
+		LOGGER.info("Totoal size: {}" + entities.size());
 		try {
 			ERM2BeansHelper.createDirectory(targetConfig.getRootFolder());
 		} catch (Exception e) {
 			LOGGER.info("Impossible to create the root folder: "+targetConfig.getRootFolder());
 		}	
+		LOGGER.info("----Directory created----");
 		writeModel(entities);
 		LOGGER.info("Model generated successfully");
 		writeDao(entities);
@@ -106,7 +108,7 @@ public class GeneratorService implements GenericService {
 			//Setting package from the Configuration
 			entity.setDaoPackage(targetConfig.getPackageDao());
 			entity.removeInterfaces();
-			entity.addInterface("GenericDao <" + entity.getName() + ", Identifier, String>");
+			entity.addInterface("GenericImpDao <" + entity.getName() + ", Identifier, String>");
 			className = entity.getName();
 			fileName = className + "Dao.java";
 			classRender	= new DaoClassRender(entity);		
