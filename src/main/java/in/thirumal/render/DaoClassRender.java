@@ -32,10 +32,10 @@ public class DaoClassRender extends BaseClassRender {
 		addMandatoryPackage("java.time.LocalDate");
 		addMandatoryPackage("java.util.List");
 		addMandatoryPackage("java.util.Optional");
-		addMandatoryPackage("org.springframework.beans.factory.annotation.Autowired");
-		addMandatoryPackage("org.springframework.core.env.Environment");
+	//	addMandatoryPackage("org.springframework.beans.factory.annotation.Autowired");
+	//	addMandatoryPackage("org.springframework.core.env.Environment");
 		addMandatoryPackage("org.springframework.jdbc.core.BatchPreparedStatementSetter");
-		addMandatoryPackage("org.springframework.jdbc.core.JdbcTemplate");
+	//	addMandatoryPackage("org.springframework.jdbc.core.JdbcTemplate");
 		//addMandatoryPackage("org.springframework.jdbc.core.PreparedStatementCreator");
 		addMandatoryPackage("org.springframework.jdbc.core.RowMapper");
 		addMandatoryPackage("org.springframework.dao.EmptyResultDataAccessException");
