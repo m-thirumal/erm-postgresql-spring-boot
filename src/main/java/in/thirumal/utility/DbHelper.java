@@ -54,6 +54,7 @@ public final class DbHelper {
 		javaTypesResultSet.put("DateTimeRange", "%s.getObject(%s)");
 		javaTypesResultSet.put("bigint", "%s.getObject(%s)");
 		javaTypesResultSet.put("tstzrange", "%s.getObject(%s)");
+		javaTypesResultSet.put("hstore", "%s.getObject(%s)");
 		javaTypesResultSet.put("_int8", "%s.getInt(%s)");
 		
 		//Enum
@@ -123,6 +124,7 @@ public final class DbHelper {
 		javaTypesPreparedStatementSet.put("DateTimeRange", "%s.setObject(%s, %s)");
 		javaTypesPreparedStatementSet.put("bigint", "%s.setObject(%s, %s)");
 		javaTypesPreparedStatementSet.put("tstzrange", "%s.setObject(%s, %s)");
+		javaTypesPreparedStatementSet.put("hstore", "%s.setObject(%s, %s)");
 		javaTypesPreparedStatementSet.put("_int8", "%s.setObject(%s, %s)");
 		//Enum
 		javaTypesPreparedStatementSet.put("nature_of_money", "%s.setString(%s, %s)");
@@ -203,6 +205,7 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("bit", "Boolean");
 		
 		sqlTypesJavaTypes.put("date", "LocalDate");
+		sqlTypesJavaTypes.put("hstore", "Map<Object, Object>");
 		
 		/* BASE VERSION
 		sqlTypesJavaTypes.put("time", "Time");
@@ -290,6 +293,7 @@ public final class DbHelper {
 		simpleNamesCanonicalNames.put("OffsetDateTime", "java.time.OffsetDateTime");
 		simpleNamesCanonicalNames.put("PGpoint", "org.postgresql.geometric.PGpoint");
 		simpleNamesCanonicalNames.put("LocalDate", "java.time.LocalDate");
+		simpleNamesCanonicalNames.put("Map<Object, Object>", "java.util.Map");
 		simpleNamesCanonicalNames.put("DateRange", "com.enkindle.persistence.code.shared.DateRange");
 		simpleNamesCanonicalNames.put("tsrange", "com.enkindle.persistence.code.shared.DateTimeRange");
 		
