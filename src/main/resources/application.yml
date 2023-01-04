@@ -5,7 +5,7 @@ spring:
   main: 
     allow-bean-definition-overriding: true
   datasource:
-    jdbc-url: jdbc:postgresql://192.168.0.27:5432/icms
+    jdbc-url: jdbc:postgresql://3.6.239.198:5432/payment
     url: ${spring.datasource.jdbc-url}
     username: postgres
     password: thirumal
@@ -18,17 +18,21 @@ server:
   port: 21991
   compression:
     enabled: true
- 
----
-
-logging: 
- level: 
-  in.thirumal: debug
-  org.springframework:
-     jdbc.datasource.DataSourceTransactionManager: debug
-     cloud.task: DEBUG
-
-
+  http2:
+    enabled: true
+  shutdown: graceful
+logging:
+  level:
+    '[in.thirumal]': debug
+    '[org.springframework]': debug
+  file:
+    path: logs
+    name: logs/payment.log
+  logback: 
+    rollingpolicy: 
+      max-history: 10
+      max-file-size: 100MB
+      total-size-cap: 1GB
 
 #   
 #springdoc:
