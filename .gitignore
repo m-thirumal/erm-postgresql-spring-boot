@@ -31,4 +31,4 @@ build/
 .vscode/
 #####
 /erm2beans/
-
+logs/
