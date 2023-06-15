@@ -70,7 +70,7 @@ public class ModelClassRender extends BaseClassRender {
 		}
      	output.append("/**\r\n" + 
      			" * Generated using erm-postgresql-spring-boot project\r\n"+
-     			" * @see <a href=\"https://github.com/M-Thirumal/erm-postgresql-spring-boot\">erm-postgresql-spring-boot</a>\r\n" +
+     			" * @see <a href=\"https://github.com/M-Thirumal\">erm-postgresql-spring-boot</a>\r\n" +
      			" * @author erm-postgresql-spring-boot\r\n" + 
      			" * @since "+ LocalDate.now() +"\r\n" + 
      			" * @version 1.0\r\n" + 
@@ -85,7 +85,7 @@ public class ModelClassRender extends BaseClassRender {
 		//Declaring fields
 		output.append(tabulation+"//Declaring fields" + lineSeparator);
 		for (Attribute eachattr : entity.getAlAttr()){
-			if (eachattr.getName().equalsIgnoreCase("rowCreationDate") || eachattr.getName().equalsIgnoreCase("rowcreatedby")) {
+			if (eachattr.getName().equalsIgnoreCase("rowCreatedOn") || eachattr.getName().equalsIgnoreCase("rowcreatedby")) {
 				output.append(tabulation + "@EqualsAndHashCode.Exclude" + lineSeparator);
 			}
 			output.append("	private " + eachattr.getJavaType() + " " + eachattr.getName() + ";" + lineSeparator);

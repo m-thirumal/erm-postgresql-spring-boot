@@ -108,7 +108,7 @@ public class GeneratorService implements GenericService {
 			//Setting package from the Configuration
 			entity.setDaoPackage(targetConfig.getPackageDao());
 			entity.removeInterfaces();
-			entity.addInterface("GenericImpDao <" + entity.getName() + ", Identifier, String>");
+			entity.addInterface("GenericDaoImp <" + entity.getName() + ", Identifier, String>");
 			className = entity.getName();
 			fileName = className + "Dao.java";
 			classRender	= new DaoClassRender(entity);		
