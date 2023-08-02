@@ -47,7 +47,7 @@ public class SchemaDao implements GenericDao<Entity> {
 	        @Override
 	        public ResultSet doInConnection(Connection connection) throws SQLException {
 	        	metadata = connection.getMetaData();
-	            return connection.getMetaData().getColumns(databaseName, schemaName, null, null);
+	        	return connection.getMetaData().getColumns(databaseName, schemaName, null, null);
 	        }
 	    });
 		return getEntities(resultSet, databaseName);
