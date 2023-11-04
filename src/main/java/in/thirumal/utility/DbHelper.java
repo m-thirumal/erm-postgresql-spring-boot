@@ -29,6 +29,7 @@ public final class DbHelper {
 		javaTypesResultSet.put("Long", "%s.getLong(%s)");
 		javaTypesResultSet.put("bigserial", "%s.getLong(%s)");
 		javaTypesResultSet.put("Float", "%s.getFloat(%s)");
+		javaTypesResultSet.put("Float", "%s.getFloat(%s)");
 		javaTypesResultSet.put("Double", "%s.getDouble(%s)");
 		javaTypesResultSet.put("byte[]", "%s.getBytes(%s)");
 		javaTypesResultSet.put("Date", "%s.getDate(%s)");
@@ -56,6 +57,7 @@ public final class DbHelper {
 		javaTypesResultSet.put("tstzrange", "%s.getObject(%s)");
 		javaTypesResultSet.put("hstore", "%s.getObject(%s)");
 		javaTypesResultSet.put("_int8", "%s.getInt(%s)");
+		javaTypesResultSet.put("float8", "%s.getFloat(%s)");
 		
 		//Enum
 		javaTypesResultSet.put("nature_of_money", "%s.getString(%s)");
@@ -187,11 +189,14 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("smallmoney", "BigDecimal");
 		sqlTypesJavaTypes.put("real", "Float");
 		sqlTypesJavaTypes.put("float", "Double");
+		sqlTypesJavaTypes.put("float8", "Float");
+		sqlTypesJavaTypes.put("float4", "Float");
 		sqlTypesJavaTypes.put("unsigned smallint", "Integer");
 		sqlTypesJavaTypes.put("unsigned int", "Integer");
 		sqlTypesJavaTypes.put("unsigned bigint", "BigDecimal");
 		sqlTypesJavaTypes.put("_int4", "Integer");
 		sqlTypesJavaTypes.put("_int8", "Integer");
+		
 		
 		sqlTypesJavaTypes.put("binary", "byte[]");
 		sqlTypesJavaTypes.put("varbinary", "byte[]");
@@ -232,6 +237,7 @@ public final class DbHelper {
 		sqlTypesJavaTypes.put("int2", "Integer");
 		sqlTypesJavaTypes.put("int4", "Integer");
 		sqlTypesJavaTypes.put("int8", "Integer");
+		sqlTypesJavaTypes.put("float8", "Float");
 		sqlTypesJavaTypes.put("bpchar", "String");
 		sqlTypesJavaTypes.put("chkpass", "String");
 		sqlTypesJavaTypes.put("inet", "String");
