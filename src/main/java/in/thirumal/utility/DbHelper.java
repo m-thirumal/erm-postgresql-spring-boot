@@ -456,4 +456,36 @@ public final class DbHelper {
 		}
 		return result;
 	}	
+	
+	public static String createSimplifiedResulSet(String rs, String javaType, String sqlType, String name) {
+		String result	= null;
+		String rsGet	= null;		
+		try {
+			rsGet = javaTypeToResultSetGet(javaType);
+		} catch (Exception e) {
+			System.out.println(sqlType + ", " + javaType);
+			e.printStackTrace();
+		}
+		boolean mappingExists = rsGet != null && !rsGet.isEmpty();
+		if (mappingExists) {
+			if(sqlType != null){
+				if(sqlType.equalsIgnoreCase("time") || sqlType.equalsIgnoreCase("smalldatetime") || 
+						   sqlType.equalsIgnoreCase("datetime") || sqlType.equalsIgnoreCase("datetime2") || 
+						   sqlType.equalsIgnoreCase("timestamp") || sqlType.equalsIgnoreCase("datetimeoffset")){
+							javaType = "Timestamp";							
+				} else if(sqlType.equalsIgnoreCase("date")){
+					javaType = "Date";
+				}
+			}
+			result  = "(" + javaType + ")"  +  rs + ".getObject(\"" + name + "\", " + javaType + ".class));";
+//			result = rs + ".getObject(\"" + name + "\") != null ? "	+ String.format(rsGet, rs, "\"" + name + "\"") + " : null";
+//			if (sqlType.equalsIgnoreCase("uuid")) {
+//				result = rs + ".getObject(\"" + name + "\") != null ? "	+ String.format(rsGet, ("(java.util.UUID) " + rs), "\"" + name + "\"") + " : null";
+//			}
+//			if (sqlType.equalsIgnoreCase("date")) {
+//				result = rs + ".getObject(\"" + name + "\") != null ? "	+ String.format(rsGet, rs, "\"" + name + "\"") + " : null";
+//			}
+		}
+		return result;
+	}	
 }

@@ -183,8 +183,9 @@ public class DaoClassRender extends BaseClassRender {
 					methodName = StringHelper.getMethodNameForBoolean(StringHelper.sanitizeForAttributName(attribut.getName()));
 				}*/
 				methodName += "()";
-				preparementSet = DbHelper.createPreparementSet("ps", (psIndex),
-						attribut.getJavaType(), attribut.getSqlType(), classNameLowerCase + "."	+ methodName, true);
+				//preparementSet = DbHelper.createPreparementSet("ps", (psIndex),
+				//		attribut.getJavaType(), attribut.getSqlType(), classNameLowerCase + "."	+ methodName, true);
+				preparementSet = "setValue(ps, " + psIndex + ", " + methodName + ");" + lineSeparator;
 				output.append(tabulation+tabulation  + preparementSet);
 			}
 
@@ -358,7 +359,7 @@ public class DaoClassRender extends BaseClassRender {
 		for (int i = 0, attributesLenght = attributes.size(); i < attributesLenght; i++) {
 			attribut = attributes.get(i);
 			output.append(StringHelper.lineSeparator);
-			String rsCreated = DbHelper.createResulSet("rs", attribut.getJavaType(), attribut.getSqlType(),
+			String rsCreated = DbHelper.createSimplifiedResulSet("rs", attribut.getJavaType(), attribut.getSqlType(),
 					attribut.getRawName());
 			//if (!attribut.getJavaType().equalsIgnoreCase("Boolean")) {
 				methodName = StringHelper.saniziteForClassName(attribut
@@ -367,6 +368,7 @@ public class DaoClassRender extends BaseClassRender {
 			/*} else {
 				methodName = "set" + StringHelper.getMethodNameForBoolean(StringHelper.sanitizeForAttributName(attribut.getName()));
 			}*/
+				System.out.println(rsCreated);
 			String setObj = classNameLowerCase + "." + methodName + "("	+ rsCreated + ")";
 			output.append(tabulation + tabulation + setObj + ";" + lineSeparator);
 			if (attribut.isForeignKey() && attribut.getRawName().toLowerCase().endsWith("_cd")) {
