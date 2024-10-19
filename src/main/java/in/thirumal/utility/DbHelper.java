@@ -477,7 +477,7 @@ public final class DbHelper {
 					javaType = "Date";
 				}
 			}
-			result  = "(" + javaType + ")"  +  rs + ".getObject(\"" + name + "\", " + javaType + ".class));";
+			result  =  rs + ".getObject(\"" + name + "\", " + javaType + ".class)";
 //			result = rs + ".getObject(\"" + name + "\") != null ? "	+ String.format(rsGet, rs, "\"" + name + "\"") + " : null";
 //			if (sqlType.equalsIgnoreCase("uuid")) {
 //				result = rs + ".getObject(\"" + name + "\") != null ? "	+ String.format(rsGet, ("(java.util.UUID) " + rs), "\"" + name + "\"") + " : null";
