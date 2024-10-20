@@ -185,7 +185,7 @@ public class DaoClassRender extends BaseClassRender {
 				methodName += "()";
 				//preparementSet = DbHelper.createPreparementSet("ps", (psIndex),
 				//		attribut.getJavaType(), attribut.getSqlType(), classNameLowerCase + "."	+ methodName, true);
-				preparementSet = "setValue(ps, " + psIndex + ", " + methodName + ");" + lineSeparator;
+				preparementSet = "setValue(ps, " + psIndex + ", " + classNameLowerCase + "." + methodName + ");" + lineSeparator;
 				output.append(tabulation+tabulation  + preparementSet);
 			}
 
@@ -368,7 +368,6 @@ public class DaoClassRender extends BaseClassRender {
 			/*} else {
 				methodName = "set" + StringHelper.getMethodNameForBoolean(StringHelper.sanitizeForAttributName(attribut.getName()));
 			}*/
-				System.out.println(rsCreated);
 			String setObj = classNameLowerCase + "." + methodName + "("	+ rsCreated + ")";
 			output.append(tabulation + tabulation + setObj + ";" + lineSeparator);
 			if (attribut.isForeignKey() && attribut.getRawName().toLowerCase().endsWith("_cd")) {
